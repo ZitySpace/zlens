@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+cd ui && ./.husky/commit-msg && cd ..
+result1=$?
+
+if [ $result1 -ne 0 ]; then
+    exit 1
+fi
+
+exit 0
