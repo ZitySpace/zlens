@@ -1,3 +1,3 @@
 export default function Home() {
-  return <div>lens ui</div>;
+  return <div className='text-red-300 p-4'>root page</div>;
 }
