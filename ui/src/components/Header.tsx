@@ -8,7 +8,7 @@ import {
 
 const Header = () => {
   return (
-    <div className='bg-indigo-600 max-w-screen-2xl mx-auto px-4 fixed w-full z-20'>
+    <div className='bg-indigo-600 mx-auto px-4 fixed w-full z-20'>
       <div className='flex items-center justify-between h-12'>
         <div className='h-8 w-8 relative'>
           <Link href='/'>

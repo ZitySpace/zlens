@@ -21,7 +21,11 @@ const FormulaBar = () => {
         }`}
       >
         <PanelGroup direction='vertical'>
-          <Panel maxSize={75} className='flex justify-center px-4 py-2'>
+          <Panel
+            maxSize={75}
+            className='flex justify-center px-4 py-2'
+            defaultSize={30}
+          >
             <InstalledFormulaTable
               data={Array.from({ length: 5 }, (_, i) => ({
                 id: i,
