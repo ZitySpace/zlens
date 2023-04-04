@@ -1,6 +1,6 @@
 import './globals.css';
 import Header from '@/components/Header';
-import Sidebar from '@/components/Sidebar';
+import SideBar from '@/components/SideBar';
 
 export const metadata = {
   title: 'ZLens',
@@ -19,8 +19,10 @@ export default function RootLayout({
     <html lang='en'>
       <body>
         <Header />
-        <Sidebar />
-        <div className='pt-12 pl-16'>{children}</div>
+        <SideBar />
+        <div className='pt-12 pl-16 h-screen w-full overflow-y-auto fixed'>
+          {children}
+        </div>
       </body>
     </html>
   );
