@@ -8,6 +8,7 @@ import {
 } from './Icons';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import InstalledFormulaTable from './InstalledFormulaTable';
+import AvailableFormulaList from './AvailableFormulaList';
 
 const FormulaBar = () => {
   const [open, setOpen] = useState(false);
@@ -22,20 +23,13 @@ const FormulaBar = () => {
         <PanelGroup direction='vertical'>
           <Panel maxSize={75} className='flex justify-center px-4 py-2'>
             <InstalledFormulaTable
-              data={[
-                { id: 1, name: 'row 1' },
-                { id: 2, name: 'row 2' },
-                { id: 3, name: 'row 3' },
-                { id: 4, name: 'row 4' },
-                { id: 5, name: 'row 5' },
-                { id: 6, name: 'row 6' },
-                { id: 7, name: 'row 7' },
-                { id: 8, name: 'row 8' },
-                { id: 9, name: 'row 9' },
-                { id: 10, name: 'row 10' },
-              ]}
+              data={Array.from({ length: 5 }, (_, i) => ({
+                id: i,
+                name: `row ${i}`,
+              }))}
             />
           </Panel>
+
           <PanelResizeHandle className='flex flex-col justify-center items-center'>
             <div className='px-4 w-20 h-3 bg-indigo-100 z-10'>
               <VResizeSolidIcon className='w-full h-full text-gray-400' />
@@ -44,7 +38,10 @@ const FormulaBar = () => {
               <div className='h-px w-full bg-gray-200'></div>
             </div>
           </PanelResizeHandle>
-          <Panel maxSize={75}>bottom</Panel>
+
+          <Panel maxSize={75} className='flex justify-center px-4 py-2'>
+            <AvailableFormulaList />
+          </Panel>
         </PanelGroup>
       </div>
 

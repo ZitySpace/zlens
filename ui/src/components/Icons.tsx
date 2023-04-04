@@ -277,3 +277,21 @@ export const TrashSolidIcon = (props: React.ComponentProps<'svg'>) => (
     />
   </svg>
 );
+
+export const PlusSolidIcon = (props: React.ComponentProps<'svg'>) => (
+  <svg
+    width='48'
+    height='48'
+    viewBox='0 0 48 48'
+    fill='none'
+    xmlns='http://www.w3.org/2000/svg'
+    {...props}
+  >
+    <path
+      fill-rule='evenodd'
+      clip-rule='evenodd'
+      d='M24 43.2C34.6039 43.2 43.2 34.6039 43.2 24C43.2 13.3961 34.6039 4.8 24 4.8C13.3961 4.8 4.79999 13.3961 4.79999 24C4.79999 34.6039 13.3961 43.2 24 43.2ZM26.4 16.8C26.4 15.4745 25.3255 14.4 24 14.4C22.6745 14.4 21.6 15.4745 21.6 16.8V21.6H16.8C15.4745 21.6 14.4 22.6745 14.4 24C14.4 25.3255 15.4745 26.4 16.8 26.4H21.6V31.2C21.6 32.5255 22.6745 33.6 24 33.6C25.3255 33.6 26.4 32.5255 26.4 31.2V26.4H31.2C32.5255 26.4 33.6 25.3255 33.6 24C33.6 22.6745 32.5255 21.6 31.2 21.6H26.4V16.8Z'
+      fill='currentColor'
+    />
+  </svg>
+);
