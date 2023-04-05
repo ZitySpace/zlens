@@ -115,6 +115,7 @@ const Table: React.FC<TableProps> = ({ data }) => {
           <thead className='bg-gray-100'>
             <tr>
               <th></th>
+              <th></th>
               <th className='px-4 py-2 text-left text-xs font-normal text-gray-500'>
                 Formulas
               </th>
@@ -131,16 +132,20 @@ const Table: React.FC<TableProps> = ({ data }) => {
                 selectedId={selectedId}
                 setSelectedId={setSelectedId}
               >
+                <td className='px-2 w-8'>
+                  <EyeSolidIcon
+                    className={`w-4 h-4 ${
+                      selectedId === row.id
+                        ? 'text-emerald-400'
+                        : 'text-gray-400'
+                    }`}
+                  />
+                </td>
                 <td className='px-4 py-2 whitespace-nowrap'>
                   <div className='text-sm text-gray-500'>{row.name}</div>
                 </td>
-                <td className='px-2 w-16'>
-                  <div
-                    className={`flex justify-between ${
-                      selectedId === row.id ? '' : 'hidden'
-                    }`}
-                  >
-                    <EyeSolidIcon className='w-4 h-4 text-green-400' />
+                <td className='px-4 w-8'>
+                  <div className={`${selectedId === row.id ? '' : 'hidden'}`}>
                     <TrashSolidIcon className='w-4 h-4 text-red-400' />
                   </div>
                 </td>
