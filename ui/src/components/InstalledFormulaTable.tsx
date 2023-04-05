@@ -1,4 +1,4 @@
-import React, { ReactNode, useState, useRef } from 'react';
+import React, { ReactNode, useState, useRef, useContext } from 'react';
 import { useDrag, useDrop, DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import {
@@ -7,6 +7,8 @@ import {
   EyeHideSolidIcon,
   TrashSolidIcon,
 } from './Icons';
+import { FormulaStoreContext } from '@/stores/FormulaStore';
+import { useStore } from 'zustand';
 
 type DraggableRowProps = {
   id: string | number;
@@ -88,65 +90,78 @@ const DraggableRow: React.FC<DraggableRowProps> = ({
   );
 };
 
-type DataRow = {
-  id: string | number;
-  name: string;
-};
-
-type TableProps = {
-  data: DataRow[];
-};
-
-const Table: React.FC<TableProps> = ({ data }) => {
-  const [rows, setRows] = useState<DataRow[]>(data);
+const Table = () => {
   const [selectedId, setSelectedId] = useState<string | number | null>(null);
 
-  const moveRow = (fromIndex: number, toIndex: number) => {
-    const updatedRows = [...rows];
-    const draggedRow = updatedRows.splice(fromIndex, 1)[0];
-    updatedRows.splice(toIndex, 0, draggedRow);
-    setRows(updatedRows);
-  };
+  const formulaStore = useContext(FormulaStoreContext);
+  const [installed, swap, toggleVisble, uninstall] = useStore(
+    formulaStore,
+    (s) => [
+      s.installed,
+      s.actions.swap,
+      s.actions.toggleVisble,
+      s.actions.uninstall,
+    ]
+  );
 
   return (
     <DndProvider backend={HTML5Backend}>
       <div className='max-h-full w-full overflow-y-auto scroll-smooth rounded-lg border'>
         <table className='min-w-full divide-y divide-gray-200'>
-          <thead className='bg-gray-100'>
+          <thead className='bg-gray-200'>
             <tr>
-              <th></th>
-              <th></th>
+              <th className='w-12'></th>
+              <th className='w-8'></th>
               <th className='px-4 py-2 text-left text-xs font-normal text-gray-500'>
                 Formulas
               </th>
-              <th></th>
+              <th className='w-8'></th>
             </tr>
           </thead>
           <tbody className='bg-white divide-y divide-gray-200'>
-            {rows.map((row, index) => (
+            {installed.map((formula, index) => (
               <DraggableRow
-                key={row.id}
-                id={row.id}
+                key={formula.instanceId!}
+                id={formula.instanceId!}
                 index={index}
-                moveRow={moveRow}
+                moveRow={swap}
                 selectedId={selectedId}
                 setSelectedId={setSelectedId}
               >
                 <td className='px-2 w-8'>
-                  <EyeSolidIcon
-                    className={`w-4 h-4 ${
-                      selectedId === row.id
-                        ? 'text-emerald-400'
-                        : 'text-gray-400'
-                    }`}
-                  />
+                  {formula.visible ? (
+                    <EyeSolidIcon
+                      className={`w-4 h-4 ${
+                        selectedId === formula.instanceId
+                          ? 'text-emerald-400'
+                          : 'text-gray-400'
+                      }`}
+                      onClick={() => toggleVisble(formula.instanceId!)}
+                    />
+                  ) : (
+                    <EyeHideSolidIcon
+                      className={`w-4 h-4 ${
+                        selectedId === formula.instanceId
+                          ? 'text-emerald-400'
+                          : 'text-gray-400'
+                      }`}
+                      onClick={() => toggleVisble(formula.instanceId!)}
+                    />
+                  )}
                 </td>
                 <td className='px-4 py-2 whitespace-nowrap'>
-                  <div className='text-sm text-gray-500'>{row.name}</div>
+                  <div className='text-xs text-gray-500'>{formula.title}</div>
                 </td>
                 <td className='px-4 w-8'>
-                  <div className={`${selectedId === row.id ? '' : 'hidden'}`}>
-                    <TrashSolidIcon className='w-4 h-4 text-red-400' />
+                  <div
+                    className={`${
+                      selectedId === formula.instanceId ? '' : 'hidden'
+                    }`}
+                  >
+                    <TrashSolidIcon
+                      className='w-4 h-4 text-red-400'
+                      onClick={() => uninstall(formula.instanceId!)}
+                    />
                   </div>
                 </td>
               </DraggableRow>

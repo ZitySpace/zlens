@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useState } from 'react';
 import {
   LeftCollapseOutlineIcon,
@@ -26,12 +24,7 @@ const FormulaBar = () => {
             className='flex justify-center px-4 py-2'
             defaultSize={30}
           >
-            <InstalledFormulaTable
-              data={Array.from({ length: 5 }, (_, i) => ({
-                id: i,
-                name: `row ${i}`,
-              }))}
-            />
+            <InstalledFormulaTable />
           </Panel>
 
           <PanelResizeHandle className='flex flex-col justify-center items-center'>
