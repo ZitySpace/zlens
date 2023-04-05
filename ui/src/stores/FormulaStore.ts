@@ -1,14 +1,7 @@
 import { createContext } from 'react';
 import { createStore, StoreApi } from 'zustand';
 import produce from 'immer';
-
-interface Formula {
-  id: string | number;
-  title: string;
-  description: string;
-  visible?: boolean;
-  instanceId?: string | number;
-}
+import { Formula } from '@/interfaces';
 
 interface Store {
   installed: Formula[];
