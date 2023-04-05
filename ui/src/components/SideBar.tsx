@@ -35,8 +35,6 @@ const SidebarItem = ({
 };
 
 const SideBar = () => {
-  const pathname = usePathname();
-
   return (
     <div className='bg-indigo-200 w-16 h-screen fixed flex flex-col justify-between items-center pt-[72px] pb-4 z-10'>
       <div className='flex flex-col space-y-6'>

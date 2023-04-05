@@ -20,7 +20,7 @@ export default function RootLayout({
       <body>
         <Header />
         <SideBar />
-        <div className='pt-12 pl-16 h-screen w-full overflow-y-auto fixed'>
+        <div className='pt-12 pl-16 h-screen w-full overflow-y-auto scroll-smooth fixed'>
           {children}
         </div>
       </body>

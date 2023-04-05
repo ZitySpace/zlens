@@ -9,7 +9,7 @@ export default function Home() {
     <FormulaStoreContext.Provider value={FormulaStore}>
       <FormulaBar />
 
-      <div className='p-16'>
+      <div className='p-16 h-full overflow-y-auto scroll-smooth'>
         <FormulaStack />
       </div>
     </FormulaStoreContext.Provider>

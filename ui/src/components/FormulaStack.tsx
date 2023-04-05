@@ -77,7 +77,7 @@ const DraggableBlock: React.FC<DraggableBlockProps> = ({
       }  ${selected ? 'shadow-xl' : ''}`}
       onMouseDown={() => select(index)}
     >
-      <span ref={dragRef} className='absolute top-2 left-2'>
+      <span ref={dragRef} className='absolute top-2 left-2 cursor-pointer'>
         <VDragSolidIcon
           className={`w-6 h-6 ${
             selected ? 'text-indigo-600' : 'text-gray-400'
