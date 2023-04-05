@@ -5,17 +5,20 @@ import { Formula } from '@/interfaces';
 
 interface Store {
   installed: Formula[];
+  selectedInstanceId: string | number | null;
 
   actions: {
     install: (formula: Formula) => boolean;
     toggleVisble: (instanceId: string | number) => boolean;
     uninstall: (instanceId: string | number) => boolean;
     swap: (fromIdx: number, toIdx: number) => boolean;
+    select: (idx: number) => boolean;
   };
 }
 
 const store = createStore<Store>((set, get) => ({
   installed: [],
+  selectedInstanceId: null,
 
   actions: {
     install: (formula) => {
@@ -59,6 +62,7 @@ const store = createStore<Store>((set, get) => ({
       set(
         produce((s: Store) => {
           s.installed.splice(idx, 1);
+          s.selectedInstanceId = null;
         })
       );
 
@@ -73,6 +77,14 @@ const store = createStore<Store>((set, get) => ({
           s.installed[toIdx] = formula;
         })
       );
+      return true;
+    },
+
+    select: (idx) => {
+      const formula = get().installed[idx];
+      if (!formula) return false;
+
+      set({ selectedInstanceId: formula.instanceId ?? null });
       return true;
     },
   },

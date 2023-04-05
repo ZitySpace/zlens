@@ -9,30 +9,32 @@ import {
 } from './Icons';
 import { FormulaStoreContext } from '@/stores/FormulaStore';
 import { useStore } from 'zustand';
+import { shallow } from 'zustand/shallow';
 
 type DraggableRowProps = {
-  id: string | number;
   index: number;
-  moveRow: (fromIndex: number, toIndex: number) => void;
+  instanceId: number | string;
   children: ReactNode;
-  selectedId: string | number | null;
-  setSelectedId: (id: string | number | null) => void;
 };
 
 const DraggableRow: React.FC<DraggableRowProps> = ({
-  id,
   index,
-  moveRow,
+  instanceId,
   children,
-  selectedId,
-  setSelectedId,
 }) => {
+  const formulaStore = useContext(FormulaStoreContext);
+  const [selectedInstanceId, swap, select] = useStore(
+    formulaStore,
+    (s) => [s.selectedInstanceId, s.actions.swap, s.actions.select],
+    shallow
+  );
+
   const dropRef = useRef<HTMLTableRowElement>(null);
   const dragRef = useRef<HTMLTableCellElement>(null);
 
   const [, drop] = useDrop({
     accept: 'row',
-    hover: (item: { id: string | number; index: number }, monitor) => {
+    hover: (item: { index: number }, monitor) => {
       if (!dropRef.current) return;
 
       const dragIndex = item.index;
@@ -52,20 +54,20 @@ const DraggableRow: React.FC<DraggableRowProps> = ({
 
       if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return;
 
-      moveRow(dragIndex, hoverIndex);
+      swap(dragIndex, hoverIndex);
       item.index = hoverIndex;
     },
   });
 
   const [{ isDragging }, drag, preview] = useDrag({
     type: 'row',
-    item: { id, index },
+    item: { index },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
   });
 
-  const selected = selectedId === id;
+  const selected = selectedInstanceId === instanceId;
 
   preview(drop(dropRef));
   drag(dragRef);
@@ -76,7 +78,7 @@ const DraggableRow: React.FC<DraggableRowProps> = ({
       className={`${isDragging ? 'opacity-75 shadow-lg' : ''} ${
         selected ? 'bg-indigo-100' : ''
       }`}
-      onMouseDown={() => setSelectedId(id)}
+      onMouseDown={() => select(index)}
     >
       <td ref={dragRef} className='px-4 w-12 cursor-pointer'>
         <VDragSolidIcon
@@ -91,17 +93,16 @@ const DraggableRow: React.FC<DraggableRowProps> = ({
 };
 
 const Table = () => {
-  const [selectedId, setSelectedId] = useState<string | number | null>(null);
-
   const formulaStore = useContext(FormulaStoreContext);
-  const [installed, swap, toggleVisble, uninstall] = useStore(
+  const [installed, selectedInstanceId, toggleVisble, uninstall] = useStore(
     formulaStore,
     (s) => [
       s.installed,
-      s.actions.swap,
+      s.selectedInstanceId,
       s.actions.toggleVisble,
       s.actions.uninstall,
-    ]
+    ],
+    shallow
   );
 
   return (
@@ -122,17 +123,14 @@ const Table = () => {
             {installed.map((formula, index) => (
               <DraggableRow
                 key={formula.instanceId!}
-                id={formula.instanceId!}
                 index={index}
-                moveRow={swap}
-                selectedId={selectedId}
-                setSelectedId={setSelectedId}
+                instanceId={formula.instanceId!}
               >
                 <td className='px-2 w-8'>
                   {formula.visible ? (
                     <EyeSolidIcon
                       className={`w-4 h-4 ${
-                        selectedId === formula.instanceId
+                        formula.instanceId === selectedInstanceId
                           ? 'text-emerald-400'
                           : 'text-gray-400'
                       }`}
@@ -141,7 +139,7 @@ const Table = () => {
                   ) : (
                     <EyeHideSolidIcon
                       className={`w-4 h-4 ${
-                        selectedId === formula.instanceId
+                        formula.instanceId === selectedInstanceId
                           ? 'text-emerald-400'
                           : 'text-gray-400'
                       }`}
@@ -155,7 +153,7 @@ const Table = () => {
                 <td className='px-4 w-8'>
                   <div
                     className={`${
-                      selectedId === formula.instanceId ? '' : 'hidden'
+                      formula.instanceId === selectedInstanceId ? '' : 'hidden'
                     }`}
                   >
                     <TrashSolidIcon
