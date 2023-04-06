@@ -1,9 +1,15 @@
 #!/usr/bin/env sh
 
-cd ui && ./.husky/commit-msg && cd ..
-result1=$?
+repo_root="$(git rev-parse --show-toplevel)"
 
-if [ $result1 -ne 0 ]; then
+# git will auto generate a file contains the commit message content .git/COMMIT_EDITMSG
+commit_msg_file="$1"
+
+# use ui husky's commitizen for commit message linting
+cd "${repo_root}/ui" && ./.husky/commit-msg "$commit_msg_file" && cd "${repo_root}"
+result=$?
+
+if [ $result -ne 0 ]; then
     exit 1
 fi
 

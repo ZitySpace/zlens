@@ -1,0 +1,44 @@
+[tool.poetry]
+name = "zlens-api"
+version = "0.1.0"
+description = "APIs for zlens"
+authors = ["Rui Zheng <rui@zityspace.com>"]
+readme = "README.md"
+packages = [{include = "zlens_api"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+
+[tool.poetry.group.dev.dependencies]
+ipdb = "^0.13.13"
+black = "^23.3.0"
+flake8 = "^6.0.0"
+isort = "^5.12.0"
+pre-commit = "^3.2.2"
+commitizen = "^2.42.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 120
+exclude = '''
+(
+  /(
+      alembic
+  )/
+)
+'''
+preview = true
+
+[tool.isort]
+profile = "black"
+skip = ["alembic"]
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "0.1.0"
+version_files = ["pyproject.toml:version"]
+tag_format = "v$version"

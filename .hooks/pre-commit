@@ -1,9 +1,14 @@
 #!/usr/bin/env sh
 
-cd ui && ./.husky/pre-commit && cd ..
+repo_root="$(git rev-parse --show-toplevel)"
+
+cd "${repo_root}/ui" && ./.husky/pre-commit && cd "${repo_root}"
 result1=$?
 
-if [ $result1 -ne 0 ]; then
+cd "${repo_root}/api" && ./.hooks/pre-commit && cd "${repo_root}"
+result2=$?
+
+if [ $result1 -ne 0 ] || [ $result2 -ne 0 ]; then
     exit 1
 fi
 
