@@ -8,6 +8,8 @@ packages = [{include = "zlens_api"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
+uvicorn = "^0.21.1"
+fastapi = "^0.95.0"
 
 
 [tool.poetry.group.dev.dependencies]
