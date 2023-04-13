@@ -92,13 +92,13 @@ const DraggableBlock: React.FC<DraggableBlockProps> = ({
 const Stack = () => {
   const formulaStore = useContext(FormulaStoreContext);
 
-  const installed = useStore(formulaStore, (state) => state.installed);
+  const instances = useStore(formulaStore, (state) => state.instances);
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <Flipper flipKey={installed.map((f) => f.instanceId).join('-')}>
+      <Flipper flipKey={instances.map((f) => f.instanceId).join('-')}>
         <div className='flex flex-col space-y-4'>
-          {installed.map((formula, index) => (
+          {instances.map((formula, index) => (
             <Flipped key={formula.instanceId} flipId={formula.instanceId}>
               <div>
                 <DraggableBlock index={index} instanceId={formula.instanceId!}>

@@ -2,42 +2,32 @@ import React, { useContext } from 'react';
 import { PlusSolidIcon } from './Icons';
 import { FormulaStoreContext } from '@/stores/FormulaStore';
 import { useStore } from 'zustand';
-
-const data = [
-  {
-    id: 1,
-    title: 'Category distribution',
-    description:
-      'A quick visual summary of how the data is distributed across the categories in the dataset. It can reveal imbalances or other patterns in the data that may be useful to know for training machine learning models.',
-  },
-  {
-    id: 2,
-    title: 'Size distribution',
-    description:
-      'Image size distribution and box size distribution help detecting erratic images and annotations in the dataset.',
-  },
-  {
-    id: 3,
-    title: 'Annotation tracker',
-    description:
-      'Manage annotation progress and discover quality issues as early as possible.',
-  },
-  {
-    id: 4,
-    title: 'Hirarchical category treeview',
-    description:
-      'Using tree / treemap representation to understand and navigate category taxonomy, discover imbalance issue in the dataset.',
-  },
-];
+import { useQuery } from '@tanstack/react-query';
+import { getInstalledFormulas } from '@/utils/formula';
+import { SpinnerIcon } from './Icons';
+import { Formula } from '@/interfaces';
 
 const List = () => {
   const formulaStore = useContext(FormulaStoreContext);
-  const install = useStore(formulaStore, (s) => s.actions.install);
+  const add = useStore(formulaStore, (s) => s.actions.add);
+
+  const {
+    isLoading,
+    isFetching,
+    data: installedFormulas,
+  } = useQuery<Formula[]>(['installedFormulas'], getInstalledFormulas, {});
+
+  if (isLoading || isFetching)
+    return (
+      <div className='h-full w-full flex justify-center items-center text-indigo-400'>
+        <SpinnerIcon className='h-8 w-8' />
+      </div>
+    );
 
   return (
     <div className='max-h-full w-full overflow-y-auto scroll-smooth pb-16'>
       <div className='flex flex-col space-y-4'>
-        {data.map((d, i) => (
+        {installedFormulas!.map((d, i) => (
           <div
             key={i}
             className='w-full border h-36 bg-gray-50 rounded-lg pt-4 pb-2 px-4 flex flex-col justify-between items-start divide-y divide-gray-200'
@@ -62,7 +52,7 @@ const List = () => {
               <button
                 type='button'
                 className='inline-flex items-center gap-x-1.5 rounded-sm bg-indigo-600 px-2.5 py-1 text-xs font-medium text-white shadow-sm hover:bg-indigo-500'
-                onClick={() => install(d)}
+                onClick={() => add(d)}
               >
                 <PlusSolidIcon className='-ml-0.5 h-4 w-4' />
                 Add

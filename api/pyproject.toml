@@ -4,7 +4,6 @@ version = "0.1.0"
 description = "APIs for zlens"
 authors = ["Rui Zheng <rui@zityspace.com>"]
 readme = "README.md"
-packages = [{include = "zlens_api"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"

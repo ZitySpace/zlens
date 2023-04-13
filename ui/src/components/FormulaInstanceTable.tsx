@@ -94,13 +94,13 @@ const DraggableRow: React.FC<DraggableRowProps> = ({
 
 const Table = () => {
   const formulaStore = useContext(FormulaStoreContext);
-  const [installed, selectedInstanceId, toggleVisble, uninstall] = useStore(
+  const [instances, selectedInstanceId, toggleVisble, remove] = useStore(
     formulaStore,
     (s) => [
-      s.installed,
+      s.instances,
       s.selectedInstanceId,
       s.actions.toggleVisble,
-      s.actions.uninstall,
+      s.actions.remove,
     ],
     shallow
   );
@@ -120,7 +120,7 @@ const Table = () => {
             </tr>
           </thead>
           <tbody className='bg-white divide-y divide-gray-200'>
-            {installed.map((formula, index) => (
+            {instances.map((formula, index) => (
               <DraggableRow
                 key={formula.instanceId!}
                 index={index}
@@ -158,7 +158,7 @@ const Table = () => {
                   >
                     <TrashSolidIcon
                       className='w-4 h-4 text-red-400'
-                      onClick={() => uninstall(formula.instanceId!)}
+                      onClick={() => remove(formula.instanceId!)}
                     />
                   </div>
                 </td>
