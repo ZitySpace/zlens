@@ -20,7 +20,6 @@ export const useInstances = (route: string) => {
 
   return useQuery<Formula[]>(['instances', route], () => getInstances(route), {
     onSuccess: (data) => {
-      console.log(data);
       if (route in formulaMap) return;
       const store = createFormulaStore({ instances: data });
       add(route, store);

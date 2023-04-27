@@ -2,7 +2,6 @@ import json
 import os
 import random
 import socket
-from datetime import datetime
 
 import yaml
 from databases import Database
@@ -11,7 +10,6 @@ from fastapi import APIRouter, Depends, Form
 from ...db.connect import get_db
 from ...db.core import (
     clear_all_instances,
-    create_formulas,
     create_instances,
     create_route,
     get_all_formulas,
@@ -65,63 +63,8 @@ def random_port():
 
 @r.get("/formulas/installed", summary="get installed formulas")
 async def get_installed_formulas_r(db: Database = Depends(get_db)):
-    # formulas = [
-    #     {
-    #         "id": 1,
-    #         "title": "Category distribution",
-    #         "slug": "category-distribution",
-    #         "version": "0.0.1",
-    #         "creator": "zityspace",
-    #         "author": "zheng rui",
-    #         "description": (
-    #             "A quick visual summary of how the data is distributed across the categories in the dataset. It can"
-    #             " reveal imbalances or other patterns in the data that may be useful to know for training machine"
-    #             " learning models."
-    #         ),
-    #     },
-    #     {
-    #         "id": 2,
-    #         "title": "Size distribution",
-    #         "slug": "size-distribution",
-    #         "version": "0.0.1",
-    #         "creator": "zityspace",
-    #         "author": "zheng rui",
-    #         "description": (
-    #             "Image size distribution and box size distribution help detecting erratic images and annotations "
-    #             " in the dataset."
-    #         ),
-    #     },
-    #     {
-    #         "id": 3,
-    #         "title": "Annotation tracker",
-    #         "slug": "annotation-tracker",
-    #         "version": "0.0.1",
-    #         "creator": "zityspace",
-    #         "author": "zheng rui",
-    #         "description": "Manage annotation progress and discover quality issues as early as possible.",
-    #     },
-    #     {
-    #         "id": 4,
-    #         "title": "Hirarchical category treeview",
-    #         "slug": "hirarchical-category-treeview",
-    #         "version": "0.0.1",
-    #         "creator": "zityspace",
-    #         "author": "zheng rui",
-    #         "description": (
-    #             "Using tree / treemap representation to understand and navigate category taxonomy, discover imbalance"
-    #             " issue in the dataset."
-    #         ),
-    #     },
-    # ]
-
-    # now = datetime.now().replace(microsecond=0)
-    # for fm in formulas:
-    #     fm['installed_at'] = now
-    #     fm['updated_at'] = now
-
-    # await create_formulas(db, formulas)
-
     formulas = await get_all_formulas(db)
+
     return formulas
 
 
