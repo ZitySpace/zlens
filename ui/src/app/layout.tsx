@@ -2,6 +2,7 @@ import './globals.css';
 import Header from '@/components/Header';
 import SideBar from '@/components/SideBar';
 import QueryProvider from './QueryProvider';
+import RouteStoreContextProvider from './RouteStoreContextProvider';
 
 export const metadata = {
   title: 'ZLens',
@@ -19,13 +20,15 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body>
-        <QueryProvider>
-          <Header />
-          <SideBar />
-          <div className='pt-12 pl-16 h-screen w-full overflow-y-auto scroll-smooth fixed'>
-            {children}
-          </div>
-        </QueryProvider>
+        <RouteStoreContextProvider>
+          <QueryProvider>
+            <Header />
+            <SideBar />
+            <div className='pt-12 pl-16 h-screen w-full overflow-y-auto scroll-smooth fixed'>
+              {children}
+            </div>
+          </QueryProvider>
+        </RouteStoreContextProvider>
       </body>
     </html>
   );

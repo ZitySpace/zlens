@@ -1,26 +1,21 @@
-import React, { useContext } from 'react';
 import { PlusSolidIcon } from './Icons';
-import { FormulaStoreContext } from '@/stores/FormulaStore';
-import { useStore } from 'zustand';
-import { useQuery } from '@tanstack/react-query';
-import { getInstalledFormulas } from '@/utils/formula';
-import { SpinnerIcon } from './Icons';
-import { Formula } from '@/interfaces';
+import { SpinnerSolidIcon } from './Icons';
+import { useInstalledFormulas } from '@/hooks/useInstalledFormulas';
+import { useCreateInstance } from '@/hooks/useCreateInstance';
 
 const List = () => {
-  const formulaStore = useContext(FormulaStoreContext);
-  const add = useStore(formulaStore, (s) => s.actions.add);
-
   const {
     isLoading,
     isFetching,
     data: installedFormulas,
-  } = useQuery<Formula[]>(['installedFormulas'], getInstalledFormulas, {});
+  } = useInstalledFormulas();
+
+  const createInstance = useCreateInstance();
 
   if (isLoading || isFetching)
     return (
       <div className='h-full w-full flex justify-center items-center text-indigo-400'>
-        <SpinnerIcon className='h-8 w-8' />
+        <SpinnerSolidIcon className='h-8 w-8' />
       </div>
     );
 
@@ -52,7 +47,7 @@ const List = () => {
               <button
                 type='button'
                 className='inline-flex items-center gap-x-1.5 rounded-sm bg-indigo-600 px-2.5 py-1 text-xs font-medium text-white shadow-sm hover:bg-indigo-500'
-                onClick={() => add(d)}
+                onClick={() => createInstance(d)}
               >
                 <PlusSolidIcon className='-ml-0.5 h-4 w-4' />
                 Add
