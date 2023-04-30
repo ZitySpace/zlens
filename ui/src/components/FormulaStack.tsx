@@ -1,4 +1,10 @@
-import React, { ReactNode, useContext, useRef } from 'react';
+import React, {
+  ReactNode,
+  useContext,
+  useRef,
+  useEffect,
+  useState,
+} from 'react';
 import { FormulaStoreContext } from '@/stores/FormulaStore';
 import { Flipper, Flipped } from 'react-flip-toolkit';
 import { useDrag, useDrop, DndProvider } from 'react-dnd';
@@ -6,6 +12,7 @@ import { useStore } from 'zustand';
 import { shallow } from 'zustand/shallow';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { VDragSolidIcon } from './Icons';
+import MicroApp from './MicroApp';
 
 type DraggableBlockProps = {
   index: number;
@@ -94,6 +101,14 @@ const Stack = () => {
 
   const instances = useStore(formulaStore, (state) => state.instances);
 
+  const [origin, setOrigin] = useState<string>('');
+
+  useEffect(() => {
+    setOrigin(window.location.origin);
+  }, []);
+
+  if (!origin) return <></>;
+
   return (
     <DndProvider backend={HTML5Backend}>
       <Flipper flipKey={instances.map((f) => f.instanceId).join('-')}>
@@ -102,8 +117,15 @@ const Stack = () => {
             <Flipped key={formula.instanceId} flipId={formula.instanceId}>
               <div>
                 <DraggableBlock index={index} instanceId={formula.instanceId!}>
-                  <div className='h-36 w-full p-6 shadow-md rounded-lg bg-indigo-200 flex justify-center items-center'>
+                  <div className='h-full w-full p-1 border shadow-sm rounded-lg flex flex-col justify-center items-center'>
                     {formula.title}
+                    <div className='w-full'>
+                      <MicroApp
+                        name={formula.instanceId}
+                        url={`${origin}/formula-ui/${formula.creator}/${formula.slug}/${formula.config?.ui}/index.html`}
+                        baseroute='/formula'
+                      />
+                    </div>
                   </div>
                 </DraggableBlock>
               </div>

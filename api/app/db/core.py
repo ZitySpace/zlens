@@ -1,3 +1,4 @@
+import json
 import os
 from typing import List
 
@@ -26,8 +27,8 @@ async def create_instances(db: Database, instances: List[dict]):
     await db.execute_many(query, instances)
 
 
-async def clear_all_instances(db: Database):
-    query = delete(InstancesTable)
+async def clear_instances(db: Database, route: str):
+    query = delete(InstancesTable).where(InstancesTable.route.has(route=route))
 
     await db.execute(query)
 
@@ -50,8 +51,11 @@ async def create_route(db: Database, route: str):
 async def get_formula(db: Database, id: int):
     query = select([FormulasTable]).where(FormulasTable.id == id)
 
-    formulas = await db.fetch_one(query)
-    return formulas
+    formula = await db.fetch_one(query)
+
+    formula_ = FormulasTable(**formula)
+    formula_.config = json.loads(formula.config)
+    return formula_
 
 
 async def create_formula(db: Database, formula: dict):
@@ -64,7 +68,13 @@ async def get_all_formulas(db: Database):
     query = select([FormulasTable])
 
     formulas = await db.fetch_all(query)
-    return formulas
+    formulas_ = []
+    for formula in formulas:
+        formula_ = FormulasTable(**formula)
+        formula_.config = json.loads(formula.config)
+        formulas_.append(formula_)
+
+    return formulas_
 
 
 async def create_formulas(db: Database, formulas: List[dict]):

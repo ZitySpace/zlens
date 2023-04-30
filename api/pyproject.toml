@@ -12,6 +12,7 @@ fastapi = "^0.95.0"
 databases = {extras = ["aiosqlite"], version = "^0.7.0"}
 loguru = "^0.7.0"
 python-multipart = "^0.0.6"
+celery = {extras = ["gevent"], version = "^5.2.7"}
 
 
 [tool.poetry.group.dev.dependencies]
@@ -22,6 +23,7 @@ isort = "^5.12.0"
 pre-commit = "^3.2.2"
 commitizen = "^2.42.1"
 alembic = "^1.10.4"
+watchdog = "^3.0.0"
 
 [build-system]
 requires = ["poetry-core"]

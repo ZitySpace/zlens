@@ -1,8 +1,8 @@
-"""create instances and routes table
+"""create formulas, instances, routes table
 
-Revision ID: cc4cdc2b2d11
+Revision ID: 234c7c59f980
 Revises: 
-Create Date: 2023-04-27 16:31:00.637003
+Create Date: 2023-04-30 00:11:32.849159
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = "cc4cdc2b2d11"
+revision = "234c7c59f980"
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -27,6 +27,7 @@ def upgrade():
         sa.Column("version", sa.String(length=32), nullable=False),
         sa.Column("creator", sa.String(length=32), nullable=False),
         sa.Column("author", sa.String(length=32), nullable=False),
+        sa.Column("config", sa.Text(), nullable=False),
         sa.Column("installed_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False),
         sa.PrimaryKeyConstraint("id"),

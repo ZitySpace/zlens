@@ -1,4 +1,4 @@
-from sqlalchemy import Column, DateTime, Integer, String
+from sqlalchemy import Column, DateTime, Integer, String, Text
 from sqlalchemy.orm import relationship
 
 from ..base import Base
@@ -14,6 +14,7 @@ class FormulasTable(Base):
     version = Column("version", String(32), nullable=False)
     creator = Column("creator", String(32), nullable=False)
     author = Column("author", String(32), nullable=False)
+    config = Column("config", Text, nullable=False)
     installed_at = Column("installed_at", DateTime(timezone=True), nullable=False)
     updated_at = Column("updated_at", DateTime(timezone=True), nullable=False)
 

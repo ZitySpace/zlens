@@ -6,6 +6,10 @@ export interface Formula {
   creator: string;
   author: string;
   description: string;
+  config?: {
+    ui?: string;
+    entrypoint?: unknown;
+  };
   visible?: boolean;
   instanceId?: string | number;
 }

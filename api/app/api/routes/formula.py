@@ -1,15 +1,13 @@
 import json
 import os
-import random
-import socket
 
-import yaml
 from databases import Database
 from fastapi import APIRouter, Depends, Form
+from fastapi.responses import FileResponse
 
 from ...db.connect import get_db
 from ...db.core import (
-    clear_all_instances,
+    clear_instances,
     create_instances,
     create_route,
     get_all_formulas,
@@ -20,45 +18,7 @@ from ...db.core import (
 
 formula_router = r = APIRouter(tags=["Formula"])
 
-
-MIN_PORT = 50000
-MAX_PORT = 65535
-unassigned_ports = list(range(MIN_PORT, MAX_PORT + 1))
-random.shuffle(unassigned_ports)
-
 FORMULAS_FD = os.path.abspath("../../formulas")
-
-
-# formula utility functions
-def _try_port(port):
-    with socket.socket() as s:
-        try:
-            s.bind(("", port))
-            s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            return port
-        except OSError:
-            return None
-
-
-def random_port():
-    global unassigned_ports
-
-    def _try_ports():
-        for idx, port in enumerate(unassigned_ports):
-            if _try_port(port) is not None:
-                return idx, port
-        return None, None
-
-    idx, port = _try_ports()
-
-    if not port:
-        unassigned_ports = list(set(range(MIN_PORT, MAX_PORT + 1)) - set(unassigned_ports))
-        idx, port = _try_ports()
-
-    if idx:
-        unassigned_ports.pop(idx)
-
-    return port
 
 
 @r.get("/formulas/installed", summary="get installed formulas")
@@ -89,6 +49,7 @@ async def get_instances_r(route: str, db: Database = Depends(get_db)):
                 "creator": formula.creator,
                 "author": formula.author,
                 "description": formula.description,
+                "config": formula.config,
                 "visible": ins.visible,
                 "instanceId": f"{ins.formula_id}-{ins.id}",
                 "version_matched": ins.version == formula.version,
@@ -99,17 +60,9 @@ async def get_instances_r(route: str, db: Database = Depends(get_db)):
 
 
 @r.post("/formulas/instantiation", summary="instantiate a formula")
-async def instantiate_formula_r(formula: str = Form(...), db: Database = Depends(get_db)):
-    formula_ = json.loads(formula)
-    creator, slug = formula_.get("creator"), formula_.get("slug")
-    formula_fd = os.path.join(FORMULAS_FD, creator, slug)
-    cfg = yaml.safe_load(open(os.path.join(formula_fd, "config.yaml"), "rb"))
-
-    if cfg.get("ui"):
-        # if ui exists, start serving it
-        pass
-
-    return cfg
+async def instantiate_formula_r(formula_id: int, db: Database = Depends(get_db)):
+    formula = await get_formula(db, formula_id)
+    return formula
 
 
 @r.post("/formulas/instances", summary="sync up instances")
@@ -133,5 +86,15 @@ async def sync_instances_r(instances: str = Form(...), route: str = Form(...), d
         for ins in instances_
     ]
 
-    await clear_all_instances(db)
+    await clear_instances(db, route)
     await create_instances(db, instances_)
+
+
+formula_ui_router = r_ui = APIRouter(tags=["Formula UI"])
+
+
+@r_ui.get("/{creator}/{slug}/{file_path:path}")
+async def get_formula_ui(creator: str, slug: str, file_path: str):
+    formula_fd = os.path.join(FORMULAS_FD, creator, slug)
+
+    return FileResponse(os.path.join(formula_fd, file_path))

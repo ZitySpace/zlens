@@ -5,14 +5,10 @@ import { FormulaStoreContext } from '@/stores/FormulaStore';
 import { useStore } from 'zustand';
 import { useContext } from 'react';
 
-export const postCreateInstance = requestTemplate((formula: Formula) => {
-  const formData = new FormData();
-  formData.set('formula', JSON.stringify(formula));
-
+export const postCreateInstance = requestTemplate((formula_id: number) => {
   return {
-    url: '/api/formulas/instantiation',
+    url: '/api/formulas/instantiation?formula_id=' + formula_id,
     method: 'POST',
-    body: formData,
   };
 });
 
@@ -21,11 +17,10 @@ export const useCreateInstance = () => {
   const add = useStore(formulaStore, (s) => s.actions.add);
 
   const createInstanceMutation = useMutation(
-    (formula: Formula) => postCreateInstance(formula),
+    (formula: Formula) => postCreateInstance(formula.id),
     {
       onSuccess: (data, formula) => {
-        const instance = { ...formula, version: data.version };
-        add(instance);
+        add(data);
       },
     }
   );

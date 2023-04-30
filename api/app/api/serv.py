@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from ..db.connect import close_db_connection, connect_to_db
-from .routes.formula import formula_router
+from .routes.formula import formula_router, formula_ui_router
 
 
 def create_start_app_handler(app: FastAPI) -> Callable:
@@ -36,6 +36,7 @@ def get_application():
     app.add_event_handler("shutdown", create_stop_app_handler(app))
 
     app.include_router(formula_router, prefix="/api")
+    app.include_router(formula_ui_router, prefix="/formula-ui")
 
     return app
 

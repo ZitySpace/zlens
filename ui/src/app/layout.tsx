@@ -3,6 +3,7 @@ import Header from '@/components/Header';
 import SideBar from '@/components/SideBar';
 import QueryProvider from './QueryProvider';
 import RouteStoreContextProvider from './RouteStoreContextProvider';
+import MFELayout from './mfe-layout';
 
 export const metadata = {
   title: 'ZLens',
@@ -25,7 +26,7 @@ export default function RootLayout({
             <Header />
             <SideBar />
             <div className='pt-12 pl-16 h-screen w-full overflow-y-auto scroll-smooth fixed'>
-              {children}
+              <MFELayout>{children}</MFELayout>
             </div>
           </QueryProvider>
         </RouteStoreContextProvider>
