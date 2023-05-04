@@ -1,8 +1,8 @@
 """create formulas, instances, routes table
 
-Revision ID: 234c7c59f980
+Revision ID: d4dfbfae2e9d
 Revises: 
-Create Date: 2023-04-30 00:11:32.849159
+Create Date: 2023-05-04 17:36:07.413826
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = "234c7c59f980"
+revision = "d4dfbfae2e9d"
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -31,6 +31,7 @@ def upgrade():
         sa.Column("installed_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False),
         sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint("creator", "slug", name="uq_formulas_creator_slug"),
     )
     op.create_index(op.f("ix_formulas_id"), "formulas", ["id"], unique=False)
     op.create_table(

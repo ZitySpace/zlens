@@ -1,4 +1,4 @@
-from sqlalchemy import Column, DateTime, Integer, String, Text
+from sqlalchemy import Column, DateTime, Integer, String, Text, UniqueConstraint
 from sqlalchemy.orm import relationship
 
 from ..base import Base
@@ -6,6 +6,7 @@ from ..base import Base
 
 class FormulasTable(Base):
     __tablename__ = "formulas"
+    __table_args__ = (UniqueConstraint("creator", "slug", name="uq_formulas_creator_slug"),)
 
     id = Column("id", Integer, primary_key=True, index=True)
     title = Column("title", String(64), nullable=False)
