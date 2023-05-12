@@ -85,7 +85,7 @@ async def sync_instances_r(instances: str = Form(...), route: str = Form(...), d
     await create_instances(db, instances_)
 
 
-@r.post("/formulas/services", summary="serv a formula")
+@r.post("/formulas/service", summary="serv a formula")
 async def serv_formula_r(formula_id: int, db: Database = Depends(get_db)):
     formula = await get_formula(db, formula_id)
     print(formula)

@@ -23,6 +23,7 @@ interface Store extends Data {
     swap: (fromIdx: number, toIdx: number) => boolean;
     select: (idx: number) => boolean;
     setSynced: (synced: boolean) => boolean;
+    getInstance: (instanceId: string | number) => Formula | null;
   };
 }
 
@@ -104,6 +105,16 @@ const createThisStore = (initData?: Partial<Data>) =>
       setSynced: (synced) => {
         set({ synced });
         return true;
+      },
+
+      getInstance: (instanceId) => {
+        const idx = get().instances.findIndex(
+          (formula) => formula.instanceId === instanceId
+        );
+
+        if (idx === -1) return null;
+
+        return get().instances[idx];
       },
     },
   }));

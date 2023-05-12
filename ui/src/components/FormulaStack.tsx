@@ -1,4 +1,4 @@
-import React, { ReactNode, useContext, useRef } from 'react';
+import React, { ReactNode, useContext, useMemo, useRef } from 'react';
 import { FormulaStoreContext } from '@/stores/FormulaStore';
 import { Flipper, Flipped } from 'react-flip-toolkit';
 import { useDrag, useDrop, DndProvider } from 'react-dnd';
@@ -75,7 +75,7 @@ const DraggableBlock: React.FC<DraggableBlockProps> = ({
       ref={dropRef}
       className={`relative rounded-lg ${
         isDragging ? 'opacity-75 shadow-md' : ''
-      }}`}
+      }`}
       onMouseDown={() => select(index)}
     >
       <span ref={dragRef} className='absolute top-2 left-2 cursor-pointer'>
@@ -106,7 +106,10 @@ const Stack = () => {
             <Flipped key={formula.instanceId} flipId={formula.instanceId}>
               <div>
                 <DraggableBlock index={index} instanceId={formula.instanceId!}>
-                  <FormulaBlock formula={formula} />
+                  <FormulaBlock
+                    instanceId={formula.instanceId!}
+                    key={formula.instanceId}
+                  />
                 </DraggableBlock>
               </div>
             </Flipped>

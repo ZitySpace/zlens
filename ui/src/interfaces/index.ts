@@ -8,7 +8,7 @@ export interface Formula {
   description: string;
   config?: {
     ui?: string;
-    entrypoint?: unknown;
+    entrypoint?: any;
   };
   visible?: boolean;
   instanceId?: string | number;

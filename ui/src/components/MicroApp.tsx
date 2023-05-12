@@ -15,7 +15,7 @@ const MicroApp = (props: any) => {
 
   if (!rendered) return null;
 
-  return <micro-app {...props}></micro-app>;
+  return <micro-app {...props} keep-alive></micro-app>;
 };
 
 export default MicroApp;
