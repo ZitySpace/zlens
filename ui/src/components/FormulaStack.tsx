@@ -1,10 +1,4 @@
-import React, {
-  ReactNode,
-  useContext,
-  useRef,
-  useEffect,
-  useState,
-} from 'react';
+import React, { ReactNode, useContext, useRef } from 'react';
 import { FormulaStoreContext } from '@/stores/FormulaStore';
 import { Flipper, Flipped } from 'react-flip-toolkit';
 import { useDrag, useDrop, DndProvider } from 'react-dnd';
@@ -12,7 +6,7 @@ import { useStore } from 'zustand';
 import { shallow } from 'zustand/shallow';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { VDragSolidIcon } from './Icons';
-import MicroApp from './MicroApp';
+import FormulaBlock from './FormulaBlock';
 
 type DraggableBlockProps = {
   index: number;
@@ -80,8 +74,8 @@ const DraggableBlock: React.FC<DraggableBlockProps> = ({
     <div
       ref={dropRef}
       className={`relative rounded-lg ${
-        isDragging ? 'opacity-75 shadow-lg' : ''
-      }  ${selected ? 'shadow-xl' : ''}`}
+        isDragging ? 'opacity-75 shadow-md' : ''
+      }}`}
       onMouseDown={() => select(index)}
     >
       <span ref={dragRef} className='absolute top-2 left-2 cursor-pointer'>
@@ -101,32 +95,18 @@ const Stack = () => {
 
   const instances = useStore(formulaStore, (state) => state.instances);
 
-  const [origin, setOrigin] = useState<string>('');
-
-  useEffect(() => {
-    setOrigin(window.location.origin);
-  }, []);
-
-  if (!origin) return <></>;
-
   return (
     <DndProvider backend={HTML5Backend}>
-      <Flipper flipKey={instances.map((f) => f.instanceId).join('-')}>
+      <Flipper
+        flipKey={instances.map((f) => f.instanceId).join('-')}
+        spring='stiff'
+      >
         <div className='flex flex-col space-y-4'>
           {instances.map((formula, index) => (
             <Flipped key={formula.instanceId} flipId={formula.instanceId}>
               <div>
                 <DraggableBlock index={index} instanceId={formula.instanceId!}>
-                  <div className='h-full w-full p-1 border shadow-sm rounded-lg flex flex-col justify-center items-center'>
-                    {formula.title}
-                    <div className='w-full'>
-                      <MicroApp
-                        name={formula.instanceId}
-                        url={`${origin}/formula-ui/${formula.creator}/${formula.slug}/${formula.config?.ui}/index.html`}
-                        baseroute='/formula'
-                      />
-                    </div>
-                  </div>
+                  <FormulaBlock formula={formula} />
                 </DraggableBlock>
               </div>
             </Flipped>

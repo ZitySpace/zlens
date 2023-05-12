@@ -2,8 +2,6 @@ import asyncio
 import random
 import socket
 
-from loguru import logger
-
 from ..worker import Q_FORMULA, appFormula
 
 MIN_PORT = 50000
@@ -44,10 +42,10 @@ def random_port():
     return port
 
 
-async def serv_ui(formula_fd, ui, **kwargs):
+async def serv_formula(formula_fd, ui, **kwargs):
     pass
 
 
 @appFormula.task(bind=True, acks_later=True, queue=Q_FORMULA)
-def serv_ui_t(self, *args, **kwargs):
-    return asyncio.run(serv_ui(*args, **kwargs, current_task_ref=self))
+def serv_formula_t(self, *args, **kwargs):
+    return asyncio.run(serv_formula(*args, **kwargs, current_task_ref=self))

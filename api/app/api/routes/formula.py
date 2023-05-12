@@ -28,11 +28,6 @@ async def get_installed_formulas_r(db: Database = Depends(get_db)):
     return formulas
 
 
-@r.post("/formulas/installed", summary="install a formula")
-async def install_formula_r(creator, slug, version):
-    pass
-
-
 @r.get("/formulas/instances", summary="get instances by route")
 async def get_instances_r(route: str, db: Database = Depends(get_db)):
     instances_ = await get_instances(db, route)
@@ -88,6 +83,12 @@ async def sync_instances_r(instances: str = Form(...), route: str = Form(...), d
 
     await clear_instances(db, route)
     await create_instances(db, instances_)
+
+
+@r.post("/formulas/services", summary="serv a formula")
+async def serv_formula_r(formula_id: int, db: Database = Depends(get_db)):
+    formula = await get_formula(db, formula_id)
+    print(formula)
 
 
 formula_ui_router = r_ui = APIRouter(tags=["Formula UI"])
