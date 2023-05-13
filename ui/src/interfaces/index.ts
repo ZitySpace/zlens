@@ -12,4 +12,6 @@ export interface Formula {
   };
   visible?: boolean;
   instanceId?: string | number;
+  height?: number;
+  ready?: boolean;
 }

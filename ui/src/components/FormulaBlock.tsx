@@ -1,32 +1,68 @@
 import MicroApp from './MicroApp';
 
-import { useState, memo, useContext } from 'react';
+import { useState, memo, useContext, useEffect } from 'react';
 import { FormulaStoreContext } from '@/stores/FormulaStore';
 import { useStore } from 'zustand';
 
-const FormulaBlock = ({ instanceId }: { instanceId: number | string }) => {
-  const [height, setHeight] = useState<number | null>(null);
+import { requestTemplate } from '@/utils/requestTemplate';
+import { shallow } from 'zustand/shallow';
 
+const serveFormula = requestTemplate((formula_id: number) => {
+  return {
+    url: '/api/formulas/service?formula_id=' + formula_id,
+    method: 'POST',
+  };
+});
+
+const FormulaBlock = ({ instanceId }: { instanceId: number | string }) => {
   const formulaStore = useContext(FormulaStoreContext);
-  const getInstance = useStore(formulaStore, (s) => s.actions.getInstance);
+  const [getInstance, setInstanceHeight, setInstanceReady] = useStore(
+    formulaStore,
+    (s) => [
+      s.actions.getInstance,
+      s.actions.setInstanceHeight,
+      s.actions.setInstanceReady,
+    ],
+    shallow
+  );
   const instance = getInstance(instanceId)!;
 
-  return (
-    <div className='h-full w-full p-1 border shadow-sm rounded-lg flex flex-col justify-center items-center'>
-      <div className='text-sm text-gray-600'>{instance.title}</div>
+  const height = instance.height;
+  const ready = instance.ready;
 
-      <div className={`w-full ${height ? 'h-[' + height + 'px]' : ''}`}>
-        <MicroApp
-          name={`formula-${instanceId}`}
-          url={`${window.location.origin}/formula-ui/${instance.creator}/${instance.slug}/${instance.config?.ui}/index.html`}
-          baseroute='/formula'
-          onDataChange={(e: CustomEvent) => {
-            if (!height) setHeight(e.detail.data.height);
-          }}
-        />
+  useEffect(() => {
+    (async () => {
+      if (!ready) {
+        await serveFormula(instance.id);
+        setInstanceReady(instanceId);
+      }
+    })();
+  }, []);
+
+  return (
+    <div className='h-full w-full border shadow-sm rounded-lg flex flex-col justify-center items-center'>
+      <div className='h-10 w-full bg-gray-200 text-sm text-gray-600 rounded-t-lg flex justify-center items-center'>
+        {instance.title} - {(instanceId as string).split('-')[1]}
       </div>
+
+      {ready ? (
+        <div className={`w-full ${height ? 'h-[' + height + 'px]' : 'h-full'}`}>
+          <MicroApp
+            name={`formula-${instanceId}`}
+            url={`${window.location.origin}/formula-ui/${instance.creator}/${instance.slug}/${instance.config?.ui}/index.html`}
+            baseroute='/formula'
+            onDataChange={(e: CustomEvent) => {
+              if (!height) setInstanceHeight(instanceId, e.detail.data.height);
+            }}
+          />
+        </div>
+      ) : (
+        <div className='h-60 w-full flex justify-center items-center'>
+          getting ready...
+        </div>
+      )}
     </div>
   );
 };
 
-export default memo(FormulaBlock);
+export default FormulaBlock;

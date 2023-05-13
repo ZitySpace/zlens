@@ -24,6 +24,8 @@ interface Store extends Data {
     select: (idx: number) => boolean;
     setSynced: (synced: boolean) => boolean;
     getInstance: (instanceId: string | number) => Formula | null;
+    setInstanceHeight: (instanceId: string | number, height: number) => boolean;
+    setInstanceReady: (instanceId: string | number, ready?: boolean) => boolean;
   };
 }
 
@@ -41,6 +43,7 @@ const createThisStore = (initData?: Partial<Data>) =>
               instanceId: `${formula.id}-${Math.random()
                 .toString(36)
                 .substring(2, 7)}`,
+              ready: formula.config?.entrypoint ? false : true,
             });
             s.synced = false;
           })
@@ -115,6 +118,38 @@ const createThisStore = (initData?: Partial<Data>) =>
         if (idx === -1) return null;
 
         return get().instances[idx];
+      },
+
+      setInstanceHeight: (instanceId, height) => {
+        const idx = get().instances.findIndex(
+          (formula) => formula.instanceId === instanceId
+        );
+
+        if (idx === -1) return false;
+
+        set(
+          produce((s: Store) => {
+            s.instances[idx].height = height;
+          })
+        );
+
+        return true;
+      },
+
+      setInstanceReady: (instanceId, ready = true) => {
+        const idx = get().instances.findIndex(
+          (formula) => formula.instanceId === instanceId
+        );
+
+        if (idx === -1) return false;
+
+        set(
+          produce((s: Store) => {
+            s.instances[idx].ready = ready;
+          })
+        );
+
+        return true;
       },
     },
   }));
