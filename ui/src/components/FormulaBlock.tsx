@@ -9,7 +9,7 @@ import { shallow } from 'zustand/shallow';
 
 const serveFormula = requestTemplate((formula_id: number) => {
   return {
-    url: '/api/formulas/service?formula_id=' + formula_id,
+    url: '/api/formulas/services?formula_id=' + formula_id,
     method: 'POST',
   };
 });
@@ -31,12 +31,22 @@ const FormulaBlock = ({ instanceId }: { instanceId: number | string }) => {
   const ready = instance.ready;
 
   useEffect(() => {
-    (async () => {
-      if (!ready) {
-        await serveFormula(instance.id);
+    if (ready) return;
+
+    let intervalId: NodeJS.Timeout;
+
+    const checkStatus = async () => {
+      const { status } = await serveFormula(instance.id);
+
+      if (status === 'serving') {
+        clearInterval(intervalId);
         setInstanceReady(instanceId);
       }
-    })();
+    };
+
+    intervalId = setInterval(checkStatus, 2000);
+
+    return () => clearInterval(intervalId);
   }, []);
 
   return (
