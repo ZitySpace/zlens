@@ -16,7 +16,9 @@ class FormulasTable(Base):
     creator = Column("creator", String(32), nullable=False)
     author = Column("author", String(32), nullable=False)
     config = Column("config", Text, nullable=False)
+    endpoint = Column("endpoint", String(256), nullable=True)
     installed_at = Column("installed_at", DateTime(timezone=True), nullable=False)
     updated_at = Column("updated_at", DateTime(timezone=True), nullable=False)
+    served_at = Column("served_at", DateTime(timezone=True), nullable=True)
 
     instances = relationship("InstancesTable", back_populates="formula")

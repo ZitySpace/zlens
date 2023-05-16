@@ -1,6 +1,6 @@
 from celery.result import AsyncResult
 
-from .tasks.formula import serv_ui_t
+from .tasks.formula import serv_formula_t
 
 
 def get_task_progress(task_id):

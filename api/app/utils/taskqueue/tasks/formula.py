@@ -1,13 +1,25 @@
 import asyncio
+import json
+import os
 import random
 import socket
+import subprocess
 
+from databases import Database
+
+from ....config import DATABASE_URL
+from ....db.core import create_service
 from ..worker import Q_FORMULA, appFormula
 
 MIN_PORT = 50000
 MAX_PORT = 65535
 unassigned_ports = list(range(MIN_PORT, MAX_PORT + 1))
 random.shuffle(unassigned_ports)
+
+SERVICE_FILE = os.path.abspath("app/utils/taskqueue/tasks/service.py")
+LOGS_FD = os.path.abspath("../../logs")
+
+db = Database(DATABASE_URL)
 
 
 # formula utility functions
@@ -42,8 +54,43 @@ def random_port():
     return port
 
 
-async def serv_formula(formula_fd, ui, **kwargs):
-    pass
+async def serv_formula(formula_fd, formula, **kwargs):
+    fid, title, creator, slug, version, description, config = (
+        formula.get("id"),
+        formula.get("title"),
+        formula.get("creator"),
+        formula.get("slug"),
+        formula.get("version"),
+        formula.get("description"),
+        formula.get("config"),
+    )
+    entrypoint = config.get("entrypoint")
+    main, app = entrypoint.get("main", "main.py"), entrypoint.get("serv", {}).get("app")
+
+    os.makedirs(os.path.join(LOGS_FD, creator), exist_ok=True)
+    log_file = open(os.path.join(LOGS_FD, creator, f"{slug}.log"), "w")
+    json.dump(formula, log_file, indent=2)
+    log_file.write("\n")
+
+    port = random_port()
+    serv_cmd = (
+        f"python {SERVICE_FILE}"
+        f" --main={main}"
+        f" --app={app}"
+        f" --port={port}"
+        f' --title="{title}"'
+        f" --creator={creator}"
+        f" --slug={slug}"
+        f" --version={version}"
+        f' --description="{description}"'
+    )
+
+    with log_file:
+        _ = subprocess.Popen(serv_cmd, shell=True, stdout=log_file, stderr=log_file, cwd=formula_fd)
+
+        await db.connect()
+        await create_service(db, fid, f"http://localhost:{port}")
+        await db.disconnect()
 
 
 @appFormula.task(bind=True, acks_later=True, queue=Q_FORMULA)

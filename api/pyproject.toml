@@ -13,6 +13,7 @@ databases = {extras = ["aiosqlite"], version = "^0.7.0"}
 loguru = "^0.7.0"
 python-multipart = "^0.0.6"
 celery = {extras = ["gevent"], version = "^5.2.7"}
+httpx = "^0.24.0"
 
 
 [tool.poetry.group.dev.dependencies]

@@ -1,9 +1,10 @@
 import json
 import os
+from datetime import datetime
 from typing import List
 
 from databases import Database
-from sqlalchemy import delete, insert, select
+from sqlalchemy import and_, delete, insert, select, update
 
 from .schemas import FormulasTable, InstancesTable, RoutesTable
 
@@ -58,6 +59,16 @@ async def get_formula(db: Database, id: int):
     return formula_
 
 
+async def get_formula_by_creator_slug(db: Database, creator: str, slug: str):
+    query = select([FormulasTable]).where(and_(FormulasTable.creator == creator, FormulasTable.slug == slug))
+
+    formula = await db.fetch_one(query)
+
+    formula_ = FormulasTable(**formula)
+    formula_.config = json.loads(formula.config)
+    return formula_
+
+
 async def create_formula(db: Database, formula: dict):
     query = insert(FormulasTable).values(**formula)
 
@@ -81,3 +92,10 @@ async def create_formulas(db: Database, formulas: List[dict]):
     query = insert(FormulasTable)
 
     await db.execute_many(query, formulas)
+
+
+async def create_service(db: Database, formula_id: int, endpoint: str):
+    now = datetime.now().replace(microsecond=0)
+    query = update(FormulasTable).where(FormulasTable.id == formula_id).values(endpoint=endpoint, served_at=now)
+
+    await db.execute(query)
