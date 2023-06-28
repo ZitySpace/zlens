@@ -64,6 +64,7 @@ const FormulaBlock = ({ instanceId }: { instanceId: number | string }) => {
             onDataChange={(e: CustomEvent) => {
               if (!height) setInstanceHeight(instanceId, e.detail.data.height);
             }}
+            // disableScopecss
           />
         </div>
       ) : (
