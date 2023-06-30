@@ -1,6 +1,6 @@
 import MicroApp from './MicroApp';
 
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { FormulaStoreContext } from '@/stores/FormulaStore';
 import { useStore } from 'zustand';
 
@@ -29,6 +29,7 @@ const FormulaBlock = ({ instanceId }: { instanceId: number | string }) => {
 
   const height = instance.height;
   const ready = instance.ready;
+  const endpointRef = useRef<string>();
 
   useEffect(() => {
     if (ready) return;
@@ -36,7 +37,8 @@ const FormulaBlock = ({ instanceId }: { instanceId: number | string }) => {
     let intervalId: NodeJS.Timeout;
 
     const checkStatus = async () => {
-      const { status } = await serveFormula(instance.id);
+      const { status, endpoint } = await serveFormula(instance.id);
+      endpointRef.current = endpoint;
 
       if (status === 'serving') {
         clearInterval(intervalId);
@@ -64,6 +66,7 @@ const FormulaBlock = ({ instanceId }: { instanceId: number | string }) => {
             onDataChange={(e: CustomEvent) => {
               if (!height) setInstanceHeight(instanceId, e.detail.data.height);
             }}
+            data={{ endpoint: endpointRef.current }}
             // disableScopecss
           />
         </div>
