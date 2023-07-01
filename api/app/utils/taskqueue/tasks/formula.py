@@ -4,7 +4,9 @@ import os
 import random
 import socket
 import subprocess
+import time
 
+import httpx
 from databases import Database
 
 from ....config import DATABASE_URL
@@ -54,7 +56,7 @@ def random_port():
     return port
 
 
-async def serv_formula(formula_fd, formula, **kwargs):
+async def serv_formula(formula_fd, formula, lock_release_endpoint, **kwargs):
     fid, title, creator, slug, version, description, config = (
         formula.get("id"),
         formula.get("title"),
@@ -91,6 +93,12 @@ async def serv_formula(formula_fd, formula, **kwargs):
         await db.connect()
         await create_service(db, fid, f"http://localhost:{port}")
         await db.disconnect()
+
+        # release formula creation lock after a delay to prevent spinning up
+        # multiple services for the same formula
+        time.sleep(2)
+        async with httpx.AsyncClient() as client:
+            await client.post(f"{lock_release_endpoint}?formula_id={fid}")
 
 
 @appFormula.task(bind=True, acks_later=True, queue=Q_FORMULA)

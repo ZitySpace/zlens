@@ -7,7 +7,7 @@ from typing import Optional
 import httpx
 from databases import Database
 from fastapi import APIRouter, Depends, Form, HTTPException, Request
-from fastapi.responses import FileResponse, Response
+from fastapi.responses import FileResponse, JSONResponse, Response
 
 from ...db.connect import get_db
 from ...db.core import (
@@ -105,7 +105,7 @@ async def is_serving(endpoint):
 
 
 @r.post("/formulas/services", summary="serv a formula")
-async def serv_formula_r(formula_id: int, db: Database = Depends(get_db)):
+async def serv_formula_r(formula_id: int, request: Request, db: Database = Depends(get_db)):
     formula = await get_formula(db, formula_id)
     endpoint = formula.endpoint
 
@@ -141,6 +141,7 @@ async def serv_formula_r(formula_id: int, db: Database = Depends(get_db)):
             "description": formula.description,
             "config": formula.config,
         },
+        f"{str(request.url).split('?')[0]}/lock/release",
     )
 
     return {
@@ -148,6 +149,19 @@ async def serv_formula_r(formula_id: int, db: Database = Depends(get_db)):
         "endpoint": f"formula-serv/{formula.creator}/{formula.slug}",
         "docs": f"formula-serv/{formula.creator}/{formula.slug}/docs",
     }
+
+
+@r.post("/formulas/services/lock/release", summary="release formula service creation lock")
+async def release_lock_r(formula_id: int):
+    if formula_id not in locks:
+        return JSONResponse(status_code=200, content={"detail": f"lock of formula with id {formula_id} not found"})
+
+    lock = locks[formula_id]
+
+    if lock.locked():
+        lock.release()
+
+    return JSONResponse(status_code=200, content={"detail": f"lock of formula with id {formula_id} released"})
 
 
 formula_ui_router = r_ui = APIRouter(tags=["Formula UI"])
