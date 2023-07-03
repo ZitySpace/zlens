@@ -2200,28 +2200,26 @@ dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
 
 [[package]]
 name = "zit"
-version = "0.0.1-alpha.1"
+version = "0.0.2a0"
 description = "ZitySpace CLI tool"
 category = "main"
 optional = false
-python-versions = "^3.9"
-files = []
-develop = true
+python-versions = ">=3.9,<4.0"
+files = [
+    {file = "zit-0.0.2a0-py3-none-any.whl", hash = "sha256:503d5159360eebd529130f05626da48d800ab2bdd165745b00eb961c03e42810"},
+    {file = "zit-0.0.2a0.tar.gz", hash = "sha256:f118e1ca75c9b7fe8e5c9091b7bff84c46a69d09fd67883f92859ad504c8553e"},
+]
 
 [package.dependencies]
-duckdb = "^0.8.1"
-fastapi = "^0.95.1"
-httpx = "^0.24.0"
-pandas = "^2.0.2"
-pillow = "^9.5.0"
-python-multipart = "^0.0.6"
-PyYAML = "^6.0"
-typer = {version = "^0.7.0", extras = ["all"]}
-websocket-client = "^1.5.1"
-
-[package.source]
-type = "directory"
-url = "../../zit"
+duckdb = ">=0.8.1,<0.9.0"
+fastapi = ">=0.95.1,<0.96.0"
+httpx = ">=0.24.0,<0.25.0"
+pandas = ">=2.0.2,<3.0.0"
+pillow = ">=9.5.0,<10.0.0"
+python-multipart = ">=0.0.6,<0.0.7"
+PyYAML = ">=6.0,<7.0"
+typer = {version = ">=0.7.0,<0.8.0", extras = ["all"]}
+websocket-client = ">=1.5.1,<2.0.0"
 
 [[package]]
 name = "zope-event"
@@ -2293,4 +2291,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "bfca7396801a3f9c734c941cd278993c0c9c6aab3044eed70445727deff1320c"
+content-hash = "6a561eab04ba6dc066aec808f9d259ed9331767f12f3c7b082aa2ea26825a289"

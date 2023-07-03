@@ -14,7 +14,8 @@ loguru = "^0.7.0"
 python-multipart = "^0.0.6"
 celery = {extras = ["gevent"], version = "^5.2.7"}
 httpx = "^0.24.0"
-zit = { path = "../../zit", develop = true }
+# zit = { path = "../../zit", develop = true }
+zit = { version = "*", allow-prereleases = true }
 
 
 [tool.poetry.group.dev.dependencies]
