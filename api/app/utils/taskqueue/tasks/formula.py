@@ -73,6 +73,7 @@ async def serv_formula(formula_fd, formula, lock_release_endpoint, **kwargs):
     log_file = open(os.path.join(LOGS_FD, creator, f"{slug}.log"), "w")
     json.dump(formula, log_file, indent=2)
     log_file.write("\n")
+    log_file.flush()
 
     port = random_port()
     serv_cmd = (
