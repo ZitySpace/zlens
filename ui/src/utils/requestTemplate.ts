@@ -36,6 +36,14 @@ export const getImageResponseHandler = async (response: Response) => {
   return data;
 };
 
+export const tryAPIUrl = (url: string) => {
+  if (process.env.NEXT_PUBLIC_API_PORT) {
+    return `http://localhost:${process.env.NEXT_PUBLIC_API_PORT}${url}`;
+  }
+
+  return url;
+};
+
 export const requestTemplate =
   (
     requestConstructor: Function,
@@ -56,7 +64,7 @@ export const requestTemplate =
       headersFinal.set('Authorization', `Bearer ${token}`);
     }
 
-    const request = new Request(url, {
+    const request = new Request(tryAPIUrl(url), {
       method: method,
       headers: headersFinal,
       body: body,

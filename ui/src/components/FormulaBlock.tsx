@@ -4,7 +4,7 @@ import { useContext, useEffect, useRef } from 'react';
 import { FormulaStoreContext } from '@/stores/FormulaStore';
 import { useStore } from 'zustand';
 
-import { requestTemplate } from '@/utils/requestTemplate';
+import { requestTemplate, tryAPIUrl } from '@/utils/requestTemplate';
 import { shallow } from 'zustand/shallow';
 
 const serveFormula = requestTemplate((formula_id: number) => {
@@ -31,6 +31,12 @@ const FormulaBlock = ({ instanceId }: { instanceId: number | string }) => {
   const ready = instance.ready;
   const endpointRef = useRef<string>();
 
+  const formulaUIUrl = process.env.NEXT_PUBLIC_API_PORT
+    ? tryAPIUrl(
+        `/formula-ui/${instance.creator}/${instance.slug}/${instance.config?.ui}/index.html`
+      )
+    : `${window.location.origin}/formula-ui/${instance.creator}/${instance.slug}/${instance.config?.ui}/index.html`;
+
   useEffect(() => {
     if (ready) return;
 
@@ -38,7 +44,7 @@ const FormulaBlock = ({ instanceId }: { instanceId: number | string }) => {
 
     const checkStatus = async () => {
       const { status, endpoint } = await serveFormula(instance.id);
-      endpointRef.current = endpoint;
+      endpointRef.current = tryAPIUrl(`/${endpoint}`);
 
       if (status === 'serving') {
         clearInterval(intervalId);
@@ -61,7 +67,7 @@ const FormulaBlock = ({ instanceId }: { instanceId: number | string }) => {
         <div className={`w-full ${height ? 'h-[' + height + 'px]' : 'h-full'}`}>
           <MicroApp
             name={`formula-${instanceId}`}
-            url={`${window.location.origin}/formula-ui/${instance.creator}/${instance.slug}/${instance.config?.ui}/index.html`}
+            url={formulaUIUrl}
             baseroute='/formula'
             onDataChange={(e: CustomEvent) => {
               if (!height) setInstanceHeight(instanceId, e.detail.data.height);
