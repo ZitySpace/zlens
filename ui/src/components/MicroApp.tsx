@@ -2,7 +2,7 @@
 
 /** @jsxRuntime classic */
 /** @jsx jsxCustomEvent */
-import jsxCustomEvent from '@micro-zoe/micro-app/polyfill/jsx-custom-event';
+import jsxCustomEvent from '@zityspace/micro-app/polyfill/jsx-custom-event';
 
 import { useEffect, useState } from 'react';
 

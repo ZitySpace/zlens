@@ -11,8 +11,8 @@
     "prettier:check": "prettier -c src/**/*.{js,jsx,ts,tsx}"
   },
   "dependencies": {
-    "@micro-zoe/micro-app": "^0.8.10",
     "@tanstack/react-query": "^4.29.5",
+    "@zityspace/micro-app": "0.8.11-alpha.3",
     "next": "13.2.4",
     "react": "18.2.0",
     "react-dom": "18.2.0"

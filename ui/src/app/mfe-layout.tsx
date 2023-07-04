@@ -1,6 +1,6 @@
 'use client';
 
-import microApp from '@micro-zoe/micro-app';
+import microApp from '@zityspace/micro-app';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
