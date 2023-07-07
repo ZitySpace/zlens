@@ -1,3 +1,5 @@
+import { URL } from 'url';
+
 export const responseHandlerTemplate = async (response: Response) => {
   if (response.status === 401) {
     throw new Error('Not Authorized');
@@ -38,7 +40,9 @@ export const getImageResponseHandler = async (response: Response) => {
 
 export const tryAPIUrl = (url: string) => {
   if (process.env.NEXT_PUBLIC_API_PORT) {
-    return `http://localhost:${process.env.NEXT_PUBLIC_API_PORT}${url}`;
+    return `${window.location.origin.replace(/:\d+$/, '')}:${
+      process.env.NEXT_PUBLIC_API_PORT
+    }${url}`;
   }
 
   return url;
