@@ -895,6 +895,7 @@ certifi = "*"
 httpcore = ">=0.15.0,<0.18.0"
 idna = "*"
 sniffio = "*"
+socksio = {version = ">=1.0.0,<2.0.0", optional = true, markers = "extra == \"socks\""}
 
 [package.extras]
 brotli = ["brotli", "brotlicffi"]
@@ -1846,6 +1847,18 @@ files = [
 ]
 
 [[package]]
+name = "socksio"
+version = "1.0.0"
+description = "Sans-I/O implementation of SOCKS4, SOCKS4A, and SOCKS5."
+category = "main"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "socksio-1.0.0-py3-none-any.whl", hash = "sha256:95dc1f15f9b34e8d7b16f06d74b8ccf48f609af32ab33c608d08761c5dcbb1f3"},
+    {file = "socksio-1.0.0.tar.gz", hash = "sha256:f88beb3da5b5c38b9890469de67d0cb0f9d494b78b106ca1845f96c10b91c4ac"},
+]
+
+[[package]]
 name = "sqlalchemy"
 version = "1.4.48"
 description = "Database Abstraction Library"
@@ -2200,20 +2213,20 @@ dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
 
 [[package]]
 name = "zit"
-version = "0.0.2a9"
+version = "0.0.2a10"
 description = "ZitySpace CLI tool"
 category = "main"
 optional = false
 python-versions = ">=3.9,<4.0"
 files = [
-    {file = "zit-0.0.2a9-py3-none-any.whl", hash = "sha256:76409d7d634c8d57f00e0d57a93e44c487d82a8e641a3d5a54795b772c375929"},
-    {file = "zit-0.0.2a9.tar.gz", hash = "sha256:5c66460e32d8d810dc2583220ff7652a51ec0e3f2fa420a63f3f5b6e3fcff8f1"},
+    {file = "zit-0.0.2a10-py3-none-any.whl", hash = "sha256:d81bf43280681dff9aa264ee818b0c9fbefa1a2035d50f1cfbf1df0abfa8970f"},
+    {file = "zit-0.0.2a10.tar.gz", hash = "sha256:2c389ac1ea34d47dd7fa2a5c309a477b572dc73abbbeef78498bf0254bb27894"},
 ]
 
 [package.dependencies]
 duckdb = ">=0.8.1,<0.9.0"
 fastapi = ">=0.95.1,<0.96.0"
-httpx = ">=0.24.0,<0.25.0"
+httpx = {version = ">=0.24.1,<0.25.0", extras = ["socks"]}
 pandas = ">=2.0.2,<3.0.0"
 pillow = ">=9.5.0,<10.0.0"
 python-multipart = ">=0.0.6,<0.0.7"
