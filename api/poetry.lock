@@ -2210,14 +2210,14 @@ dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
 
 [[package]]
 name = "zit"
-version = "0.0.3a2"
+version = "0.0.3a3"
 description = "ZitySpace CLI tool"
 category = "main"
 optional = false
 python-versions = ">=3.9,<4.0"
 files = [
-    {file = "zit-0.0.3a2-py3-none-any.whl", hash = "sha256:7e7f5aba29719b70822054eb44b0183e210c1bd13a8b6d815241385d5dfc30aa"},
-    {file = "zit-0.0.3a2.tar.gz", hash = "sha256:f0dd0209f999e9676fc3559abf0e34a5cbe7462deb0e6f1b2b493abc2000d52f"},
+    {file = "zit-0.0.3a3-py3-none-any.whl", hash = "sha256:15246346bf32dab788ea32c4886d603ae4c7ece729421d84ccf41decb1c28bdb"},
+    {file = "zit-0.0.3a3.tar.gz", hash = "sha256:57eb90cdd7108120af0adbae2b76f29590a0b17db0a62579b6e41488a94facd2"},
 ]
 
 [package.dependencies]
