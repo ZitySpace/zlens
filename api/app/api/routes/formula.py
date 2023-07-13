@@ -2,7 +2,7 @@ import json
 import os
 from enum import Enum
 from threading import Lock
-from typing import Optional
+from typing import Dict, Optional
 
 import httpx
 from databases import Database
@@ -105,7 +105,9 @@ async def is_serving(endpoint):
 
 
 @r.post("/formulas/services", summary="serv a formula")
-async def serv_formula_r(formula_id: int, request: Request, db: Database = Depends(get_db)):
+async def serv_formula_r(
+    formula_id: int, request: Request, db: Database = Depends(get_db), kwargs: Dict[str, str] = {}
+):
     formula = await get_formula(db, formula_id)
     endpoint = formula.endpoint
 
@@ -142,6 +144,7 @@ async def serv_formula_r(formula_id: int, request: Request, db: Database = Depen
             "config": formula.config,
         },
         f"{str(request.url).split('?')[0]}/lock/release",
+        **kwargs,
     )
 
     return {

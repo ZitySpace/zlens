@@ -21,7 +21,6 @@ def make_service(
     sys.path.insert(0, ".")
 
     try:
-        print(params_str)
         os.environ["PARAMS_STR"] = params_str
         main = importlib.import_module(os.path.splitext(main_)[0])
         app = getattr(main, app_)
