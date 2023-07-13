@@ -16,10 +16,13 @@ def make_service(
     slug: str,
     version: str,
     description: str,
+    params_str: str,
 ):
     sys.path.insert(0, ".")
 
     try:
+        print(params_str)
+        os.environ["PARAMS_STR"] = params_str
         main = importlib.import_module(os.path.splitext(main_)[0])
         app = getattr(main, app_)
 
@@ -69,6 +72,7 @@ if __name__ == "__main__":
     parser.add_argument("--slug", type=str, required=True)
     parser.add_argument("--version", type=str, required=True)
     parser.add_argument("--description", type=str, required=True)
+    parser.add_argument("--params_str", type=str, default="{}")
     args = parser.parse_args()
 
     make_service(
@@ -80,4 +84,5 @@ if __name__ == "__main__":
         args.slug,
         args.version,
         args.description,
+        args.params_str,
     )
