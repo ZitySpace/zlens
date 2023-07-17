@@ -30,6 +30,7 @@ const FormulaBlock = ({ instanceId }: { instanceId: number | string }) => {
   const height = instance.height;
   const ready = instance.ready;
   const endpointRef = useRef<string>();
+  const paramsRef = useRef<Record<string, unknown>>();
 
   const formulaUIUrl = process.env.NEXT_PUBLIC_API_PORT
     ? tryAPIUrl(
@@ -43,12 +44,9 @@ const FormulaBlock = ({ instanceId }: { instanceId: number | string }) => {
     let intervalId: NodeJS.Timeout;
 
     const checkStatus = async () => {
-      const { status, endpoint, config, params } = await serveFormula(
-        instance.id
-      );
+      const { status, endpoint, params } = await serveFormula(instance.id);
       endpointRef.current = tryAPIUrl(`/${endpoint}`);
-
-      console.log(config, params);
+      paramsRef.current = params as Record<string, unknown>;
 
       if (status === 'serving') {
         clearInterval(intervalId);
@@ -76,7 +74,7 @@ const FormulaBlock = ({ instanceId }: { instanceId: number | string }) => {
             onDataChange={(e: CustomEvent) => {
               if (!height) setInstanceHeight(instanceId, e.detail.data.height);
             }}
-            data={{ endpoint: endpointRef.current }}
+            data={{ endpoint: endpointRef.current, params: paramsRef.current }}
             // disableScopecss
           />
         </div>
