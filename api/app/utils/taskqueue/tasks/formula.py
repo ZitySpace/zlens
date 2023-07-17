@@ -56,7 +56,7 @@ def random_port():
     return port
 
 
-async def serv_formula(formula_fd, formula, lock_release_endpoint, **kwargs):
+async def serv_formula(formula_fd, formula, lock_release_endpoint, params):
     fid, title, creator, slug, version, description, config = (
         formula.get("id"),
         formula.get("title"),
@@ -67,31 +67,13 @@ async def serv_formula(formula_fd, formula, lock_release_endpoint, **kwargs):
         formula.get("config"),
     )
     entrypoint = config.get("entrypoint")
-    main, app, cfg_params = (
+    main, app = (
         entrypoint.get("main", "main.py"),
         entrypoint.get("serv", {}).get("app"),
-        entrypoint.get("serv", {}).get("parameters", {}),
     )
 
     os.makedirs(os.path.join(LOGS_FD, creator), exist_ok=True)
     log_file = open(os.path.join(LOGS_FD, creator, f"{slug}.log"), "w")
-
-    params = {}
-    for p, tv in cfg_params.items():
-        if "default" not in tv and p not in kwargs:
-            err_msg = f"Parameter {p}: neither default value nor runtime value provided.\n"
-            log_file.write(err_msg)
-            return
-
-        run_v = kwargs.get(p, tv.get("default"))
-
-        try:
-            run_v = eval(tv["type"])(run_v)
-            params[p] = run_v
-        except Exception:
-            err_msg = f"Parameter {p}: cannot cast {run_v} into type {tv['type']}.\n"
-            log_file.write(err_msg)
-            return
 
     log_file.write(json.dumps(formula, indent=2))
     log_file.write("\n")

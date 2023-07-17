@@ -110,6 +110,23 @@ async def serv_formula_r(
 ):
     formula = await get_formula(db, formula_id)
     endpoint = formula.endpoint
+    entrypoint = formula.config.get("entrypoint")
+    cfg_params = entrypoint.get("serv", {}).get("parameters", {})
+
+    params = {}
+    for p, tv in cfg_params.items():
+        if "default" not in tv and p not in kwargs:
+            raise HTTPException(
+                status_code=400, detail=f"Parameter {p}: neither default value nor runtime value provided.\n"
+            )
+
+        run_v = kwargs.get(p, tv.get("default"))
+
+        try:
+            run_v = eval(tv["type"])(run_v)
+            params[p] = run_v
+        except Exception:
+            raise HTTPException(status_code=400, detail=f"Parameter {p}: cannot cast {run_v} into type {tv['type']}.\n")
 
     if endpoint and (await is_serving(endpoint)):
         return {
@@ -117,7 +134,7 @@ async def serv_formula_r(
             "endpoint": f"formula-serv/{formula.creator}/{formula.slug}",
             "docs": f"formula-serv/{formula.creator}/{formula.slug}/docs",
             "config": formula.config,
-            "kwargs": kwargs,
+            "params": params,
         }
 
     if formula_id not in locks:
@@ -131,7 +148,7 @@ async def serv_formula_r(
             "endpoint": f"formula-serv/{formula.creator}/{formula.slug}",
             "docs": f"formula-serv/{formula.creator}/{formula.slug}/docs",
             "config": formula.config,
-            "kwargs": kwargs,
+            "params": params,
         }
 
     formula_fd = os.path.join(FORMULAS_FD, formula.creator, formula.slug)
@@ -156,7 +173,7 @@ async def serv_formula_r(
         "endpoint": f"formula-serv/{formula.creator}/{formula.slug}",
         "docs": f"formula-serv/{formula.creator}/{formula.slug}/docs",
         "config": formula.config,
-        "kwargs": kwargs,
+        "params": params,
     }
 
 

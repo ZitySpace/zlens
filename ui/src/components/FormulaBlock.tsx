@@ -43,12 +43,12 @@ const FormulaBlock = ({ instanceId }: { instanceId: number | string }) => {
     let intervalId: NodeJS.Timeout;
 
     const checkStatus = async () => {
-      const { status, endpoint, config, kwargs } = await serveFormula(
+      const { status, endpoint, config, params } = await serveFormula(
         instance.id
       );
       endpointRef.current = tryAPIUrl(`/${endpoint}`);
 
-      console.log(config, kwargs);
+      console.log(config, params);
 
       if (status === 'serving') {
         clearInterval(intervalId);
