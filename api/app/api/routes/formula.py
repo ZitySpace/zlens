@@ -165,7 +165,7 @@ async def serv_formula_r(
             "config": formula.config,
         },
         f"{str(request.url).split('?')[0]}/lock/release",
-        **kwargs,
+        params,
     )
 
     return {
