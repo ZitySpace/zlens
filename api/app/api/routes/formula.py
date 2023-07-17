@@ -116,6 +116,8 @@ async def serv_formula_r(
             "status": "serving",
             "endpoint": f"formula-serv/{formula.creator}/{formula.slug}",
             "docs": f"formula-serv/{formula.creator}/{formula.slug}/docs",
+            "config": formula.config,
+            "kwargs": kwargs,
         }
 
     if formula_id not in locks:
@@ -128,6 +130,8 @@ async def serv_formula_r(
             "status": "launching",
             "endpoint": f"formula-serv/{formula.creator}/{formula.slug}",
             "docs": f"formula-serv/{formula.creator}/{formula.slug}/docs",
+            "config": formula.config,
+            "kwargs": kwargs,
         }
 
     formula_fd = os.path.join(FORMULAS_FD, formula.creator, formula.slug)
@@ -151,6 +155,8 @@ async def serv_formula_r(
         "status": "launching",
         "endpoint": f"formula-serv/{formula.creator}/{formula.slug}",
         "docs": f"formula-serv/{formula.creator}/{formula.slug}/docs",
+        "config": formula.config,
+        "kwargs": kwargs,
     }
 
 
