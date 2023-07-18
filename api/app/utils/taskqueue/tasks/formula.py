@@ -89,11 +89,11 @@ async def serv_formula(formula_fd, formula, lock_release_endpoint, params, **kwa
         f" --main={main}"
         f" --app={app}"
         f" --port={port}"
-        f" --title='{title}'"
+        f' --title="{title}"'
         f" --creator={creator}"
         f" --slug={slug}"
         f" --version={version}"
-        f" --description='{description}'"
+        f' --description="{description}"'
         f" --params_str='{json.dumps(params)}'"
     )
 
