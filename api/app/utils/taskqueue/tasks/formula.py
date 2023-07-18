@@ -56,7 +56,7 @@ def random_port():
     return port
 
 
-async def serv_formula(formula_fd, formula, lock_release_endpoint, params):
+async def serv_formula(formula_fd, formula, lock_release_endpoint, params, **kwargs):
     fid, title, creator, slug, version, description, config = (
         formula.get("id"),
         formula.get("title"),
