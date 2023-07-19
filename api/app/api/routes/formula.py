@@ -111,7 +111,7 @@ async def serv_formula_r(
     formula = await get_formula(db, formula_id)
     endpoint = formula.endpoint
     entrypoint = formula.config.get("entrypoint")
-    cfg_params = entrypoint.get("serv", {}).get("parameters", {})
+    cfg_params = (entrypoint.get("serv") or {}).get("parameters") or {}
 
     params = {}
     for p, tv in cfg_params.items():

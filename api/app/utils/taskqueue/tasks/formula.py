@@ -69,7 +69,7 @@ async def serv_formula(formula_fd, formula, lock_release_endpoint, params, **kwa
     entrypoint = config.get("entrypoint")
     main, app = (
         entrypoint.get("main", "main.py"),
-        entrypoint.get("serv", {}).get("app"),
+        (entrypoint.get("serv") or {}).get("app"),
     )
 
     os.makedirs(os.path.join(LOGS_FD, creator), exist_ok=True)
