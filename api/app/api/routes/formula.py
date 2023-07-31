@@ -246,9 +246,11 @@ async def proxy_formula_method(
                 if "content-length" in headers:
                     headers.pop("content-length")
 
-                response = await getattr(client, method)(serv_path, headers=headers)
+                response = await getattr(client, method)(serv_path, headers=headers, timeout=None)
             else:
-                response = await getattr(client, method)(serv_path, headers=headers, data=request.stream())
+                response = await getattr(client, method)(
+                    serv_path, headers=headers, data=request.stream(), timeout=None
+                )
         except httpx.ConnectError:
             raise HTTPException(404, "Failed access of formula service")
 
