@@ -5,8 +5,9 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   CogOutlineIcon,
-  CollectionOutlineIcon,
-  BeakerOutlineIcon,
+  RectangleGroupOutlineIcon,
+  ServerStackOutlineIcon,
+  UserCircleOutlineIcon,
 } from './Icons';
 
 const SidebarItem = ({
@@ -38,10 +39,13 @@ const SideBar = () => {
   return (
     <div className='bg-indigo-200 w-16 h-screen fixed flex flex-col justify-between items-center pt-[72px] pb-4 z-10'>
       <div className='flex flex-col space-y-6'>
-        <SidebarItem href='/data' icon={CollectionOutlineIcon} />
-        <SidebarItem href='/modeling' icon={BeakerOutlineIcon} />
+        <SidebarItem href='/formulas' icon={RectangleGroupOutlineIcon} />
+        <SidebarItem href='/services' icon={ServerStackOutlineIcon} />
       </div>
-      <SidebarItem href='/settings' icon={CogOutlineIcon} />
+      <div className='flex flex-col space-y-6'>
+        <SidebarItem href='/user' icon={UserCircleOutlineIcon} />
+        <SidebarItem href='/settings' icon={CogOutlineIcon} />
+      </div>
     </div>
   );
 };
