@@ -1,6 +1,6 @@
 import './globals.css';
 import Header from '@/components/Header';
-// import SideBar from '@/components/SideBar';
+import SideBar from '@/components/SideBar';
 import QueryProvider from './QueryProvider';
 import RouteStoreContextProvider from './RouteStoreContextProvider';
 import MFELayout from './mfe-layout';
@@ -24,8 +24,8 @@ export default function RootLayout({
         <RouteStoreContextProvider>
           <QueryProvider>
             <Header />
-            {/* <SideBar /> */}
-            <div className='pt-12 h-screen w-full overflow-y-auto scroll-smooth fixed'>
+            <SideBar />
+            <div className='pt-12 pl-16 h-screen w-full overflow-y-auto scroll-smooth fixed'>
               <MFELayout>{children}</MFELayout>
             </div>
           </QueryProvider>

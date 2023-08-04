@@ -1,11 +1,10 @@
 import { requestTemplate } from '@/utils/requestTemplate';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { FormulaStoreContext } from '@/stores/FormulaStore';
 import { useStore } from 'zustand';
 import { useContext } from 'react';
 import { Formula } from '@/interfaces';
 import { shallow } from 'zustand/shallow';
-import { useQueryClient } from '@tanstack/react-query';
 
 export const postSyncInstances = requestTemplate(
   (instances: Formula[], route: string) => {
@@ -21,7 +20,7 @@ export const postSyncInstances = requestTemplate(
   }
 );
 
-export const useSyncInstances = (route: string) => {
+export const useSyncInstances = () => {
   const formulaStore = useContext(FormulaStoreContext);
   const [instances, setSynced] = useStore(
     formulaStore,
@@ -35,14 +34,14 @@ export const useSyncInstances = (route: string) => {
     ({ instances, route }: { instances: Formula[]; route: string }) =>
       postSyncInstances(instances, route),
     {
-      onSuccess: () => {
+      onSuccess: (data, { route }) => {
         setSynced(true);
         queryClient.setQueryData(['instances', route], instances);
       },
     }
   );
 
-  const syncInstances = () =>
+  const syncInstances = (route: string) =>
     syncInstancesMutation.mutate({
       instances,
       route,

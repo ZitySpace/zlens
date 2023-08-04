@@ -17,8 +17,8 @@ const SidebarItem = ({
   href: string;
   icon: (props: React.ComponentProps<'svg'>) => JSX.Element;
 }) => {
-  const pathname = usePathname();
-  const isActive = pathname === href;
+  const path = usePathname();
+  const isActive = path.includes(href);
 
   return (
     <div className={`p-2 rounded-full ${isActive ? 'bg-indigo-100' : ''}`}>

@@ -9,6 +9,7 @@ interface RouteFormulaMap {
 
 interface Data {
   formulaMap: RouteFormulaMap;
+  rootReady: boolean;
 }
 
 interface Store extends Data {
@@ -16,11 +17,13 @@ interface Store extends Data {
     formulaMap: {
       add: (route: string, store: StoreApi<FormulaStoreProps>) => boolean;
     };
+    setRootReady: (ready: boolean) => void;
   };
 }
 
 const store = createStore<Store>((set, get) => ({
   formulaMap: {},
+  rootReady: false,
   actions: {
     formulaMap: {
       add: (route, store) => {
@@ -31,6 +34,9 @@ const store = createStore<Store>((set, get) => ({
         );
         return true;
       },
+    },
+    setRootReady: (ready) => {
+      set({ rootReady: ready });
     },
   },
 }));

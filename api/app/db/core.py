@@ -49,6 +49,12 @@ async def create_route(db: Database, route: str):
     return await db.execute(query)
 
 
+async def get_children_routes(db: Database, route_id: str):
+    query = select([RoutesTable]).where(RoutesTable.parent_id == route_id)
+
+    return await db.fetch_all(query)
+
+
 async def get_formula(db: Database, id: int):
     query = select([FormulasTable]).where(FormulasTable.id == id)
 

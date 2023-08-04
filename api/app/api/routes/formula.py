@@ -15,6 +15,7 @@ from ...db.core import (
     create_instances,
     create_route,
     get_all_formulas,
+    get_children_routes,
     get_formula,
     get_formula_by_creator_slug,
     get_instances,
@@ -91,6 +92,42 @@ async def sync_instances_r(instances: str = Form(...), route: str = Form(...), d
 
     await clear_instances(db, route)
     await create_instances(db, instances_)
+
+
+@r.get("/formulas/children-routes", summary="get children routes of current route")
+async def get_children_routes_r(route: str, db: Database = Depends(get_db)):
+    route_record = await get_route(db, route)
+
+    if not route_record:
+        return []
+
+    # encode/database does not support relationship
+    children_routes = await get_children_routes(db, route_record.id)
+
+    return children_routes
+
+
+@r.get("/formulas/route", summary="get route")
+async def get_route_r(route: str, db: Database = Depends(get_db)):
+    route_record = await get_route(db, route)
+
+    if not route_record:
+        raise HTTPException(status_code=404, detail=f"Route {route} not found")
+
+    return route_record
+
+
+@r.post("/formulas/routes", summary="create route")
+async def create_route_r(route: str, db: Database = Depends(get_db)):
+    route_record = await get_route(db, route)
+
+    if route_record:
+        return route_record
+
+    _ = await create_route(db, route)
+    route_record = await get_route(db, route)
+
+    return route_record
 
 
 async def is_serving(endpoint):
