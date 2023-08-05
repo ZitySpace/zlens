@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   LeftCollapseOutlineIcon,
   RightExpandOutlineIcon,
@@ -11,12 +11,28 @@ import InstalledFormulaList from './InstalledFormulaList';
 const FormulaBar = () => {
   const [open, setOpen] = useState(false);
 
+  const barRef = useRef<HTMLDivElement>(null);
+
+  const handleCloseBar = (event: MouseEvent) => {
+    if (barRef.current && !barRef.current.contains(event.target as Node))
+      setOpen(false);
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleCloseBar);
+
+    return () => {
+      document.removeEventListener('mousedown', handleCloseBar);
+    };
+  }, []);
+
   return (
     <>
       <div
-        className={`fixed h-full z-10 w-96 bg-indigo-50 shadow-md transition duration-500 ease-in-out ${
-          open ? 'translate-x-0' : '-translate-x-full'
+        className={`fixed h-full right-0 z-10 w-96 bg-indigo-50 shadow-md transition duration-500 ease-in-out ${
+          open ? 'translate-x-0' : 'translate-x-full'
         }`}
+        ref={barRef}
       >
         <PanelGroup direction='vertical'>
           <Panel
@@ -42,14 +58,14 @@ const FormulaBar = () => {
         </PanelGroup>
       </div>
 
-      <div className='fixed z-20 bottom-5 h-8 w-12 px-2'>
+      <div className='fixed right-0 z-20 bottom-5 h-8 w-16 px-2'>
         {open ? (
-          <LeftCollapseOutlineIcon
+          <RightExpandOutlineIcon
             className='w-full h-full text-gray-500 hover:text-gray-700 cursor-pointer'
             onClick={() => setOpen(false)}
           />
         ) : (
-          <RightExpandOutlineIcon
+          <LeftCollapseOutlineIcon
             className='w-full h-full text-gray-500 hover:text-gray-700 cursor-pointer'
             onClick={() => setOpen(true)}
           />

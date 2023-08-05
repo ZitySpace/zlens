@@ -7,9 +7,17 @@ interface RouteFormulaMap {
   [key: string]: StoreApi<FormulaStoreProps>;
 }
 
+export enum View {
+  FORMULA = 'FORMULA',
+  TABLE = 'TABLE',
+  TREE = 'TREE',
+  NEW = 'NEW',
+}
+
 interface Data {
   formulaMap: RouteFormulaMap;
   rootReady: boolean;
+  view: View;
 }
 
 interface Store extends Data {
@@ -18,12 +26,14 @@ interface Store extends Data {
       add: (route: string, store: StoreApi<FormulaStoreProps>) => boolean;
     };
     setRootReady: (ready: boolean) => void;
+    setView: (view: View) => void;
   };
 }
 
 const store = createStore<Store>((set, get) => ({
   formulaMap: {},
   rootReady: false,
+  view: View.FORMULA,
   actions: {
     formulaMap: {
       add: (route, store) => {
@@ -37,6 +47,9 @@ const store = createStore<Store>((set, get) => ({
     },
     setRootReady: (ready) => {
       set({ rootReady: ready });
+    },
+    setView: (view) => {
+      set({ view });
     },
   },
 }));

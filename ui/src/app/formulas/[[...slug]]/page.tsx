@@ -4,8 +4,7 @@ import React, { useEffect } from 'react';
 
 import FormulaBar from '@/components/FormulaBar';
 import FormulaStack from '@/components/FormulaStack';
-import ToolBar from '@/components/ToolBar';
-import RouteTabBar from '@/components/RouteTabBar';
+import FormulaHeader from '@/components/FormulaHeader';
 
 import { usePathname } from 'next/navigation';
 import { FormulaStoreContext } from '@/stores/FormulaStore';
@@ -96,14 +95,13 @@ export default function Home() {
   return (
     <RouteGuard>
       <RouteLayout>
-        <FormulaBar />
-
-        <div className='px-16 py-8 h-full overflow-y-auto scroll-smooth'>
-          <RouteTabBar />
-          <FormulaStack />
+        <div className='sticky top-0 px-16 py-8 bg-white'>
+          <FormulaHeader />
         </div>
 
-        <ToolBar />
+        <div className='px-16 py-4 max-h-fit'>
+          <FormulaStack />
+        </div>
       </RouteLayout>
     </RouteGuard>
   );
