@@ -24,6 +24,8 @@ interface Store extends Data {
   actions: {
     formulaMap: {
       add: (route: string, store: StoreApi<FormulaStoreProps>) => boolean;
+      rename: (route: string, newRoute: string) => boolean;
+      delete: (route: string) => boolean;
     };
     setRootReady: (ready: boolean) => void;
     setView: (view: View) => void;
@@ -40,6 +42,34 @@ const store = createStore<Store>((set, get) => ({
         set(
           produce((s: Store) => {
             s.formulaMap = { ...s.formulaMap, [route]: store };
+          })
+        );
+        return true;
+      },
+
+      rename: (route, newRoute) => {
+        set(
+          produce((s: Store) => {
+            Object.entries(s.formulaMap).forEach(([r, store]) => {
+              if (r === route || r.startsWith(`${route}/`)) {
+                const newR = r.replace(route, newRoute);
+                s.formulaMap[newR] = store;
+                delete s.formulaMap[r];
+              }
+            });
+          })
+        );
+        return true;
+      },
+
+      delete: (route) => {
+        set(
+          produce((s: Store) => {
+            Object.keys(s.formulaMap).forEach((r) => {
+              if (r === route || r.startsWith(`${route}/`)) {
+                delete s.formulaMap[r];
+              }
+            });
           })
         );
         return true;

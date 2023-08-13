@@ -96,7 +96,7 @@ const Stack = () => {
   const instances = useStore(formulaStore, (state) => state.instances);
 
   return (
-    <DndProvider backend={HTML5Backend}>
+    <DndProvider backend={HTML5Backend} context={window}>
       <Flipper
         flipKey={instances.map((f) => f.instanceId).join('-')}
         spring='stiff'

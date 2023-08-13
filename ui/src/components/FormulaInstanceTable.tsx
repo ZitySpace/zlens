@@ -106,7 +106,7 @@ const Table = () => {
   );
 
   return (
-    <DndProvider backend={HTML5Backend}>
+    <DndProvider backend={HTML5Backend} context={window}>
       <div className='max-h-full w-full overflow-y-auto scroll-smooth rounded-lg border'>
         <table className='min-w-full divide-y divide-gray-200'>
           <thead className='bg-gray-200'>

@@ -40,6 +40,12 @@ async def get_route(db: Database, route: str):
     return await db.fetch_one(query)
 
 
+async def get_routes(db: Database):
+    query = select([RoutesTable])
+
+    return await db.fetch_all(query)
+
+
 async def create_route(db: Database, route: str):
     parent_record = await get_route(db, os.path.dirname(route))
     parent_id = parent_record.id if parent_record else None
@@ -53,6 +59,36 @@ async def get_children_routes(db: Database, route_id: str):
     query = select([RoutesTable]).where(RoutesTable.parent_id == route_id)
 
     return await db.fetch_all(query)
+
+
+async def rename_route(db: Database, route: str, new_route: str):
+    record = await get_route(db, route)
+    query = update(RoutesTable).where(RoutesTable.id == record.id).values(route=new_route)
+    await db.execute(query)
+
+    query = select([RoutesTable]).where(RoutesTable.route.like(f"{route}/%"))
+    route_records = await db.fetch_all(query)
+
+    for record in route_records:
+        query = (
+            update(RoutesTable).where(RoutesTable.id == record.id).values(route=record.route.replace(route, new_route))
+        )
+        await db.execute(query)
+
+
+async def delete_route(db: Database, route: str):
+    record = await get_route(db, route)
+    query = delete(RoutesTable).where(RoutesTable.id == record.id)
+    await db.execute(query)
+    await clear_instances(db, record.route)
+
+    query = select([RoutesTable]).where(RoutesTable.route.like(f"{route}/%"))
+    route_records = await db.fetch_all(query)
+
+    for record in route_records:
+        query = delete(RoutesTable).where(RoutesTable.id == record.id)
+        await db.execute(query)
+        await clear_instances(db, record.route)
 
 
 async def get_formula(db: Database, id: int):

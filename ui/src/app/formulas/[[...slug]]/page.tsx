@@ -2,13 +2,14 @@
 
 import React, { useEffect } from 'react';
 
-import FormulaBar from '@/components/FormulaBar';
 import FormulaStack from '@/components/FormulaStack';
 import FormulaHeader from '@/components/FormulaHeader';
+import RouteTree from '@/components/RouteTree';
+import NewRouteTable from '@/components/NewRouteTable';
 
 import { usePathname } from 'next/navigation';
 import { FormulaStoreContext } from '@/stores/FormulaStore';
-import { RouteStoreContext } from '@/stores/RouteStore';
+import { RouteStoreContext, View } from '@/stores/RouteStore';
 import { useContext } from 'react';
 import { useStore } from 'zustand';
 import { useInstances } from '@/hooks/useInstances';
@@ -92,15 +93,31 @@ const RouteLayout = ({ children }: { children: React.ReactNode }) => {
 };
 
 export default function Home() {
+  const RouteStore = useContext(RouteStoreContext);
+  const [view, setView] = useStore(RouteStore, (s) => [
+    s.view,
+    s.actions.setView,
+  ]);
+
+  useEffect(() => {
+    setView(View.FORMULA);
+  }, []);
+
   return (
     <RouteGuard>
       <RouteLayout>
-        <div className='sticky top-0 px-16 py-8 bg-white'>
+        <div className='sticky top-0 px-16 py-8 bg-white z-10'>
           <FormulaHeader />
         </div>
 
         <div className='px-16 py-4 max-h-fit'>
-          <FormulaStack />
+          {view === 'FORMULA' ? (
+            <FormulaStack />
+          ) : view === 'NEW' ? (
+            <NewRouteTable />
+          ) : view === 'TREE' ? (
+            <RouteTree />
+          ) : null}
         </div>
       </RouteLayout>
     </RouteGuard>

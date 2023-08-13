@@ -6,7 +6,7 @@ import { useStore } from 'zustand';
 import { useContext } from 'react';
 import { createFormulaStore } from '@/stores/FormulaStore';
 
-export const getInstances = requestTemplate((route: string) => ({
+export const getInstancesRequest = requestTemplate((route: string) => ({
   url: '/api/formulas/instances?route=' + route,
   method: 'GET',
 }));
@@ -18,12 +18,16 @@ export const useInstances = (route: string) => {
     s.actions.formulaMap.add,
   ]);
 
-  return useQuery<Formula[]>(['instances', route], () => getInstances(route), {
-    onSuccess: (data) => {
-      if (route in formulaMap) return;
-      const store = createFormulaStore({ instances: data });
-      add(route, store);
-    },
-    refetchOnWindowFocus: false,
-  });
+  return useQuery<Formula[]>(
+    ['instances', route],
+    () => getInstancesRequest(route),
+    {
+      onSuccess: (data) => {
+        if (route in formulaMap) return;
+        const store = createFormulaStore({ instances: data });
+        add(route, store);
+      },
+      refetchOnWindowFocus: false,
+    }
+  );
 };

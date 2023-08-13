@@ -4,12 +4,12 @@ import { RouteStoreContext } from '@/stores/RouteStore';
 import { useContext } from 'react';
 import { useStore } from 'zustand';
 
-export const postCreateRoute = requestTemplate((route: string) => ({
+export const createRouteRequest = requestTemplate((route: string) => ({
   url: '/api/formulas/routes?route=' + route,
   method: 'POST',
 }));
 
-const getParentPath = (path: string) =>
+export const getParentPath = (path: string) =>
   path.slice(
     0,
     path.endsWith('/')
@@ -24,14 +24,12 @@ export const useCreateRoute = () => {
   const setRootReady = useStore(RouteStore, (s) => s.actions.setRootReady);
 
   const createRouteMutation = useMutation(
-    ({ route }: { route: string }) => postCreateRoute(route),
+    ({ route }: { route: string }) => createRouteRequest(route),
     {
       onSuccess: (data, { route }) => {
         queryClient.invalidateQueries(['route', route]);
-        if (route !== '/formulas') {
-          queryClient.invalidateQueries(['route', getParentPath(route)]);
-          queryClient.invalidateQueries(['childRoutes', getParentPath(route)]);
-        } else {
+        queryClient.invalidateQueries(['routeTree']);
+        if (route === '/formulas') {
           setRootReady(true);
         }
       },

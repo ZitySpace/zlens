@@ -26,6 +26,7 @@ interface Store extends Data {
     getInstance: (instanceId: string | number) => Formula | null;
     setInstanceHeight: (instanceId: string | number, height: number) => boolean;
     setInstanceReady: (instanceId: string | number, ready?: boolean) => boolean;
+    cloneInstances: (instances: Formula[]) => Formula[];
   };
 }
 
@@ -150,6 +151,16 @@ const createThisStore = (initData?: Partial<Data>) =>
         );
 
         return true;
+      },
+
+      cloneInstances: (instances: Formula[]) => {
+        const clonedInstances = instances.map((instance) => ({
+          ...instance,
+          instanceId: `${instance.id}-${Math.random()
+            .toString(36)
+            .substring(2, 7)}`,
+        }));
+        return clonedInstances;
       },
     },
   }));

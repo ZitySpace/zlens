@@ -14,12 +14,15 @@ from ...db.core import (
     clear_instances,
     create_instances,
     create_route,
+    delete_route,
     get_all_formulas,
     get_children_routes,
     get_formula,
     get_formula_by_creator_slug,
     get_instances,
     get_route,
+    get_routes,
+    rename_route,
 )
 from ...utils.taskqueue import tq
 
@@ -117,6 +120,27 @@ async def get_route_r(route: str, db: Database = Depends(get_db)):
     return route_record
 
 
+@r.get("/formulas/route-tree", summary="get route tree")
+async def get_route_tree_r(db: Database = Depends(get_db)):
+    routes = await get_routes(db)
+
+    tree = {}
+    for route in routes:
+        tree[route.id] = {"route": route.route, "children": None}
+
+    root_id = None
+    for route in routes:
+        if route.parent_id:
+            if not tree[route.parent_id]["children"]:
+                tree[route.parent_id]["children"] = [tree[route.id]]
+            else:
+                tree[route.parent_id]["children"].append(tree[route.id])
+        else:
+            root_id = route.id
+
+    return tree[root_id]
+
+
 @r.post("/formulas/routes", summary="create route")
 async def create_route_r(route: str, db: Database = Depends(get_db)):
     route_record = await get_route(db, route)
@@ -128,6 +152,32 @@ async def create_route_r(route: str, db: Database = Depends(get_db)):
     route_record = await get_route(db, route)
 
     return route_record
+
+
+@r.patch("/formulas/route", summary="rename route")
+async def rename_route_r(route: str, new_route: str, db: Database = Depends(get_db)):
+    route_record = await get_route(db, route)
+
+    if not route_record:
+        raise HTTPException(status_code=404, detail=f"Route {route} not found")
+
+    new_route_record = await get_route(db, new_route)
+
+    if new_route_record:
+        raise HTTPException(status_code=409, detail=f"Route {new_route} already exists")
+
+    await rename_route(db, route, new_route)
+
+
+@r.delete("/formulas/route", summary="delete route")
+async def delete_route_r(route: str, db: Database = Depends(get_db)):
+    route_record = await get_route(db, route)
+
+    if not route_record:
+        raise HTTPException(status_code=404, detail=f"Route {route} not found")
+
+    await clear_instances(db, route)
+    await delete_route(db, route)
 
 
 async def is_serving(endpoint):

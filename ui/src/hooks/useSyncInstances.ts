@@ -6,7 +6,7 @@ import { useContext } from 'react';
 import { Formula } from '@/interfaces';
 import { shallow } from 'zustand/shallow';
 
-export const postSyncInstances = requestTemplate(
+export const syncInstancesRequest = requestTemplate(
   (instances: Formula[], route: string) => {
     const formData = new FormData();
     formData.set('instances', JSON.stringify(instances));
@@ -32,7 +32,7 @@ export const useSyncInstances = () => {
 
   const syncInstancesMutation = useMutation(
     ({ instances, route }: { instances: Formula[]; route: string }) =>
-      postSyncInstances(instances, route),
+      syncInstancesRequest(instances, route),
     {
       onSuccess: (data, { route }) => {
         setSynced(true);

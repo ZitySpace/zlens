@@ -5,7 +5,7 @@ import { FormulaStoreContext } from '@/stores/FormulaStore';
 import { useStore } from 'zustand';
 import { useContext } from 'react';
 
-export const postCreateInstance = requestTemplate((formula_id: number) => {
+export const createInstanceRequest = requestTemplate((formula_id: number) => {
   return {
     url: '/api/formulas/instantiation?formula_id=' + formula_id,
     method: 'POST',
@@ -17,7 +17,7 @@ export const useCreateInstance = () => {
   const add = useStore(formulaStore, (s) => s.actions.add);
 
   const createInstanceMutation = useMutation(
-    (formula: Formula) => postCreateInstance(formula.id),
+    (formula: Formula) => createInstanceRequest(formula.id),
     {
       onSuccess: (data, formula) => {
         add(data);
