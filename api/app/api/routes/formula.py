@@ -59,17 +59,68 @@ async def get_instances_r(route: str, db: Database = Depends(get_db)):
                 "config": formula.config,
                 "visible": ins.visible,
                 "instanceId": f"{ins.formula_id}-{ins.id}",
-                "version_matched": ins.version == formula.version,
+                # "version_matched": ins.version == formula.version,
             }
         )
 
     return instances
 
 
+@r.get("/formulas/routes-instances", summary="get instances of all routes")
+async def get_routes_instances_r(db: Database = Depends(get_db)):
+    instances = await get_instances(db)
+    rid_to_instances = {}
+    fid_to_instance = {}
+    for ins in instances:
+        rid = ins.route_id
+        fid = ins.formula_id
+
+        if fid not in fid_to_instance:
+            formula = await get_formula(db, fid)
+            fid_to_instance[fid] = {
+                "id": formula.id,
+                "title": formula.title,
+                "slug": formula.slug,
+                "version": ins.version,
+                "creator": formula.creator,
+                "author": formula.author,
+                "description": formula.description,
+                "config": formula.config,
+                "visible": ins.visible,
+                "instanceId": f"{ins.formula_id}-{ins.id}",
+                # "version_matched": ins.version == formula.version,
+            }
+
+        if rid not in rid_to_instances:
+            rid_to_instances[rid] = []
+
+        rid_to_instances[rid].append(fid_to_instance[fid])
+
+    routes = await get_routes(db)
+    routes_instances = {}
+
+    for route in routes:
+        routes_instances[route.route] = rid_to_instances.get(route.id, [])
+
+    return routes_instances
+
+
 @r.post("/formulas/instantiation", summary="instantiate a formula")
 async def instantiate_formula_r(formula_id: int, db: Database = Depends(get_db)):
     formula = await get_formula(db, formula_id)
-    return formula
+
+    ins = {
+        "id": formula.id,
+        "title": formula.title,
+        "slug": formula.slug,
+        "version": formula.version,
+        "creator": formula.creator,
+        "author": formula.author,
+        "description": formula.description,
+        "config": formula.config,
+    }
+
+    return ins
 
 
 @r.post("/formulas/instances", summary="sync up instances")

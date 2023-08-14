@@ -9,8 +9,11 @@ from sqlalchemy import and_, delete, insert, select, update
 from .schemas import FormulasTable, InstancesTable, RoutesTable
 
 
-async def get_instances(db: Database, route: str):
-    query = select([InstancesTable]).where(InstancesTable.route.has(route=route))
+async def get_instances(db: Database, route: str = None):
+    if route is None:
+        query = select([InstancesTable])
+    else:
+        query = select([InstancesTable]).where(InstancesTable.route.has(route=route))
 
     instances = await db.fetch_all(query)
     return instances

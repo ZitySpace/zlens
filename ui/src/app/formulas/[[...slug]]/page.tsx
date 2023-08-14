@@ -6,6 +6,7 @@ import FormulaStack from '@/components/FormulaStack';
 import FormulaHeader from '@/components/FormulaHeader';
 import RouteTree from '@/components/RouteTree';
 import NewRouteTable from '@/components/NewRouteTable';
+import RouteFormulaInstanceTable from '@/components/RouteFormulaInstanceTable';
 
 import { usePathname } from 'next/navigation';
 import { FormulaStoreContext } from '@/stores/FormulaStore';
@@ -117,6 +118,8 @@ export default function Home() {
             <NewRouteTable />
           ) : view === 'TREE' ? (
             <RouteTree />
+          ) : view === 'TABLE' ? (
+            <RouteFormulaInstanceTable />
           ) : null}
         </div>
       </RouteLayout>
