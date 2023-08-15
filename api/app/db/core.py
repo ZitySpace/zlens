@@ -43,6 +43,12 @@ async def get_route(db: Database, route: str):
     return await db.fetch_one(query)
 
 
+async def get_route_by_id(db: Database, id: int):
+    query = select([RoutesTable]).where(RoutesTable.id == id)
+
+    return await db.fetch_one(query)
+
+
 async def get_routes(db: Database):
     query = select([RoutesTable])
 

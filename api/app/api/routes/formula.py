@@ -21,6 +21,7 @@ from ...db.core import (
     get_formula_by_creator_slug,
     get_instances,
     get_route,
+    get_route_by_id,
     get_routes,
     rename_route,
 )
@@ -240,6 +241,30 @@ async def is_serving(endpoint):
         return False
     else:
         return True
+
+
+@r.get("/formulas/services", summary="get all services")
+async def get_services(db: Database = Depends(get_db)):
+    instances = await get_instances(db)
+    fid_to_services = {}
+
+    for ins in instances:
+        rid = ins.route_id
+        fid = ins.formula_id
+
+        if fid not in fid_to_services:
+            fid_to_services[fid] = []
+
+        route = await get_route_by_id(db, rid)
+        fid_to_services[fid].append({"instanceId": f"{ins.formula_id}-{ins.id}", "route": route.route})
+
+    formulas = await get_all_formulas(db)
+    for formula in formulas:
+        formula.services = fid_to_services.get(formula.id, [])
+        formula.serving = formula.endpoint and (await is_serving(formula.endpoint))
+        formula.docs = f"formula-serv/{formula.creator}/{formula.slug}/docs"
+
+    return formulas
 
 
 @r.post("/formulas/services", summary="serv a formula")

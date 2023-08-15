@@ -1,5 +1,3 @@
-import { URL } from 'url';
-
 export const responseHandlerTemplate = async (response: Response) => {
   if (response.status === 401) {
     throw new Error('Not Authorized');

@@ -623,3 +623,37 @@ export const CheckSolidIcon = (props: React.ComponentProps<'svg'>) => (
     />
   </svg>
 );
+
+export const StopSolidIcon = (props: React.ComponentProps<'svg'>) => (
+  <svg
+    width='24'
+    height='24'
+    viewBox='0 0 24 24'
+    fill='currentColor'
+    xmlns='http://www.w3.org/2000/svg'
+    {...props}
+  >
+    <path
+      fillRule='evenodd'
+      d='M4.5 7.5a3 3 0 013-3h9a3 3 0 013 3v9a3 3 0 01-3 3h-9a3 3 0 01-3-3v-9z'
+      clipRule='evenodd'
+    />
+  </svg>
+);
+
+export const PlaySolidIcon = (props: React.ComponentProps<'svg'>) => (
+  <svg
+    width='24'
+    height='24'
+    viewBox='0 0 24 24'
+    xmlns='http://www.w3.org/2000/svg'
+    fill='currentColor'
+    {...props}
+  >
+    <path
+      fillRule='evenodd'
+      d='M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z'
+      clipRule='evenodd'
+    />
+  </svg>
+);

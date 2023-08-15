@@ -50,7 +50,7 @@ const RouteFormulaInstanceTable = () => {
         <table className='min-w-full divide-y divide-gray-200 table-fixed'>
           <thead className='bg-gray-200'>
             <tr className='text-left text-sm font-normal text-gray-500'>
-              <th className='pl-4 py-1 w-1/2'>Sub-route</th>
+              <th className='pl-4 py-1 w-1/2'>Sub route</th>
               <th className='pr-4 py-1 flex justify-between items-center'>
                 <span>Formulas</span>
 
@@ -80,9 +80,6 @@ const RouteFormulaInstanceTable = () => {
               return (
                 <tr key={route} className='text-gray-500 even:bg-gray-50'>
                   <td className='py-2 px-4 whitespace-nowrap'>
-                    {/* <span className='text-sm font-medium text-gray-900'>
-                      {route}
-                    </span> */}
                     <Link
                       href={route}
                       className={`${
