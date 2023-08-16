@@ -4,7 +4,7 @@ import { Formula } from '@/interfaces';
 
 type ModifiedFormula = Omit<
   Formula,
-  'visible' | 'instanceId' | 'height' | 'ready'
+  'visible' | 'instanceId' | 'height' | 'ready' | 'params' | 'endpoint'
 >;
 interface ServedFormula extends ModifiedFormula {
   endpoint: string;
