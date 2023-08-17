@@ -105,12 +105,12 @@ const Stack = () => {
           {instances.map((formula, index) => (
             <Flipped key={formula.instanceId} flipId={formula.instanceId}>
               <div>
-                <DraggableBlock index={index} instanceId={formula.instanceId!}>
-                  <FormulaBlock
-                    instanceId={formula.instanceId!}
-                    key={formula.instanceId}
-                  />
-                </DraggableBlock>
+                {/* <DraggableBlock index={index} instanceId={formula.instanceId!}> */}
+                <FormulaBlock
+                  instanceId={formula.instanceId!}
+                  key={formula.instanceId}
+                />
+                {/* </DraggableBlock> */}
               </div>
             </Flipped>
           ))}

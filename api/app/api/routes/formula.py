@@ -1,13 +1,24 @@
+import asyncio
 import json
 import os
+import random
 from enum import Enum
 from threading import Lock
 from typing import Dict, Optional
 
 import httpx
 from databases import Database
-from fastapi import APIRouter, Depends, Form, HTTPException, Request
+from fastapi import (
+    APIRouter,
+    Depends,
+    Form,
+    HTTPException,
+    Request,
+    WebSocket,
+    WebSocketDisconnect,
+)
 from fastapi.responses import FileResponse, JSONResponse, Response
+from websockets.exceptions import ConnectionClosedError
 
 from ...db.connect import get_db
 from ...db.core import (
@@ -30,6 +41,7 @@ from ...utils.taskqueue import tq
 formula_router = r = APIRouter(tags=["Formula"])
 
 FORMULAS_FD = os.path.abspath("../../formulas")
+LOGS_FD = os.path.abspath("../../logs")
 
 locks = {}
 
@@ -244,7 +256,7 @@ async def is_serving(endpoint):
 
 
 @r.get("/formulas/services", summary="get all services")
-async def get_services(db: Database = Depends(get_db)):
+async def get_services_r(db: Database = Depends(get_db)):
     instances = await get_instances(db)
     fid_to_services = {}
 
@@ -351,6 +363,58 @@ async def release_lock_r(formula_id: int):
         lock.release()
 
     return JSONResponse(status_code=200, content={"detail": f"lock of formula with id {formula_id} released"})
+
+
+class WSConnectionManager:
+    def __init__(self):
+        self.active_connections: Dict[str, WebSocket] = {}
+
+    async def connect(self, websocket: WebSocket):
+        await websocket.accept()
+        sid = f"{random.randint(1, 1e7):07d}"
+
+        while sid in self.active_connections:
+            sid = f"{random.randint(1, 1e7):07d}"
+
+        self.active_connections[sid] = {"socket": websocket}
+
+        return sid
+
+    def disconnect(self, sid):
+        del self.active_connections[sid]
+
+
+manager = WSConnectionManager()
+
+
+def _get_db(websocket: WebSocket) -> Database:
+    return websocket.app.state._db
+
+
+@r.websocket("/formulas/service/log")
+async def get_service_log_r(websocket: WebSocket, formula_id: int, db: Database = Depends(_get_db)):
+    formula = await get_formula(db, formula_id)
+    log_file = os.path.join(LOGS_FD, formula.creator, f"{formula.slug}.log")
+
+    sid = await manager.connect(websocket)
+    try:
+        with open(log_file, "r") as f:
+            while True:
+                msg = await websocket.receive_text()
+                if msg == "CLOSED":
+                    raise WebSocketDisconnect()
+
+                line = f.readline()
+                if not line:
+                    await websocket.send_text("HEY_EASY")
+                    await asyncio.sleep(0.1)
+                    continue
+
+                await websocket.send_text(line)
+
+    except (WebSocketDisconnect, ConnectionClosedError):
+        print("disconnected by client")
+        manager.disconnect(sid)
 
 
 formula_ui_router = r_ui = APIRouter(tags=["Formula UI"])
