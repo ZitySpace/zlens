@@ -14,6 +14,7 @@ import {
 } from '@/components/Icons';
 
 import LogViewer from '@/components/LogViewer';
+import FormulaParamPanel from '@/components/FormulaParamPanel';
 
 const serveFormula = requestTemplate((formula_id: number) => {
   return {
@@ -123,7 +124,7 @@ const FormulaBlock = ({ instanceId }: { instanceId: number | string }) => {
       ) : mode === Mode.LOG ? (
         <LogViewer instanceId={instanceId} />
       ) : mode === Mode.CONFIG ? (
-        <div>formula config</div>
+        <FormulaParamPanel instanceId={instanceId} />
       ) : null}
 
       {ready ? (

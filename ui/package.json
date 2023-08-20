@@ -37,7 +37,7 @@
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-flip-toolkit": "^7.0.17",
-    "react-resizable-panels": "^0.0.39",
+    "react-resizable-panels": "^0.0.55",
     "tailwindcss": "^3.3.1",
     "typescript": "5.0.3",
     "zustand": "^4.3.7"

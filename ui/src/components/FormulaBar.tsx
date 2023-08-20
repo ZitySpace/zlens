@@ -3,10 +3,10 @@ import {
   LeftCollapseOutlineIcon,
   RightExpandOutlineIcon,
   VResizeSolidIcon,
-} from './Icons';
+} from '@/components/Icons';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
-import FormulaInstanceTable from './FormulaInstanceTable';
-import InstalledFormulaList from './InstalledFormulaList';
+import FormulaInstanceTable from '@/components/FormulaInstanceTable';
+import InstalledFormulaList from '@/components/InstalledFormulaList';
 
 const FormulaBar = () => {
   const [open, setOpen] = useState(false);
