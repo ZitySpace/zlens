@@ -14,6 +14,6 @@ export interface Formula {
   instanceId?: string | number;
   height?: number;
   ready?: boolean;
-  params?: Record<string, unknown>;
+  served_params?: Record<string, unknown>;
   endpoint?: string;
 }

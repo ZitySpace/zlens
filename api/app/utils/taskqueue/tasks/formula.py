@@ -101,7 +101,7 @@ async def serv_formula(formula_fd, formula, lock_release_endpoint, params, **kwa
         _ = subprocess.Popen(serv_cmd, shell=True, stdout=log_file, stderr=log_file, cwd=formula_fd)
 
         await db.connect()
-        await create_service(db, fid, f"http://localhost:{port}")
+        await create_service(db, fid, f"http://localhost:{port}", params)
         await db.disconnect()
 
         # release formula creation lock after a delay to prevent spinning up

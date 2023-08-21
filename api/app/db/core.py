@@ -107,6 +107,7 @@ async def get_formula(db: Database, id: int):
 
     formula_ = FormulasTable(**formula)
     formula_.config = json.loads(formula.config)
+    formula_.served_params = json.loads(formula.served_params)
     return formula_
 
 
@@ -145,8 +146,12 @@ async def create_formulas(db: Database, formulas: List[dict]):
     await db.execute_many(query, formulas)
 
 
-async def create_service(db: Database, formula_id: int, endpoint: str):
+async def create_service(db: Database, formula_id: int, endpoint: str, params: dict):
     now = datetime.now().replace(microsecond=0)
-    query = update(FormulasTable).where(FormulasTable.id == formula_id).values(endpoint=endpoint, served_at=now)
+    query = (
+        update(FormulasTable)
+        .where(FormulasTable.id == formula_id)
+        .values(endpoint=endpoint, served_at=now, served_params=json.dumps(params))
+    )
 
     await db.execute(query)

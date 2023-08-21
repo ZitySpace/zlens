@@ -26,6 +26,10 @@ interface Store extends Data {
       add: (route: string, store: StoreApi<FormulaStoreProps>) => boolean;
       rename: (route: string, newRoute: string) => boolean;
       delete: (route: string) => boolean;
+      updateFormulaParams: (
+        formulaId: string,
+        params: Record<string, unknown>
+      ) => boolean;
     };
     setRootReady: (ready: boolean) => void;
     setView: (view: View) => void;
@@ -72,6 +76,29 @@ const store = createStore<Store>((set, get) => ({
             });
           })
         );
+        return true;
+      },
+
+      updateFormulaParams: (formulaId, params) => {
+        const stores = Object.values(get().formulaMap).filter((store) =>
+          store
+            .getState()
+            .instances.some((instance) => instance.id.toString() === formulaId)
+        );
+
+        if (stores.length === 0) return false;
+
+        stores.forEach((store) => {
+          store.setState(
+            produce((s: FormulaStoreProps) => {
+              s.instances
+                .filter((ins) => ins.id.toString() === formulaId)
+                .forEach((ins) => {
+                  ins.served_params = params;
+                });
+            })
+          );
+        });
         return true;
       },
     },

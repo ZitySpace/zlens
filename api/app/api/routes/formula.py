@@ -73,6 +73,7 @@ async def get_instances_r(route: str, db: Database = Depends(get_db)):
                 "visible": ins.visible,
                 "instanceId": f"{ins.formula_id}-{ins.id}",
                 # "version_matched": ins.version == formula.version,
+                "served_params": formula.served_params,
             }
         )
 
@@ -131,6 +132,7 @@ async def instantiate_formula_r(formula_id: int, db: Database = Depends(get_db))
         "author": formula.author,
         "description": formula.description,
         "config": formula.config,
+        "served_params": formula.served_params,
     }
 
     return ins
@@ -309,7 +311,7 @@ async def serv_formula_r(
             "endpoint": f"formula-serv/{formula.creator}/{formula.slug}",
             "docs": f"formula-serv/{formula.creator}/{formula.slug}/docs",
             "config": formula.config,
-            "params": params,
+            "params": formula.served_params,
         }
 
     if formula_id not in locks:

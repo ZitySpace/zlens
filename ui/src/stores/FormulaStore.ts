@@ -26,14 +26,6 @@ interface Store extends Data {
     getInstance: (instanceId: string | number) => Formula | null;
     setInstanceHeight: (instanceId: string | number, height: number) => boolean;
     setInstanceReady: (instanceId: string | number, ready?: boolean) => boolean;
-    setInstanceParams: (
-      instanceId: string | number,
-      params: Record<string, unknown>
-    ) => boolean;
-    setInstanceEndpoint: (
-      instanceId: string | number,
-      endpoint: string
-    ) => boolean;
     cloneInstances: (instances: Formula[]) => Formula[];
   };
 }
@@ -161,39 +153,7 @@ const createThisStore = (initData?: Partial<Data>) =>
         return true;
       },
 
-      setInstanceParams: (instanceId, params) => {
-        const idx = get().instances.findIndex(
-          (formula) => formula.instanceId === instanceId
-        );
-
-        if (idx === -1) return false;
-
-        set(
-          produce((s: Store) => {
-            s.instances[idx].params = params;
-          })
-        );
-
-        return true;
-      },
-
-      setInstanceEndpoint: (instanceId, endpoint) => {
-        const idx = get().instances.findIndex(
-          (formula) => formula.instanceId === instanceId
-        );
-
-        if (idx === -1) return false;
-
-        set(
-          produce((s: Store) => {
-            s.instances[idx].endpoint = endpoint;
-          })
-        );
-
-        return true;
-      },
-
-      cloneInstances: (instances: Formula[]) => {
+      cloneInstances: (instances) => {
         const clonedInstances = instances.map((instance) => ({
           ...instance,
           instanceId: `${instance.id}-${Math.random()

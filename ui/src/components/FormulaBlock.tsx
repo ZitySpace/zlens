@@ -1,6 +1,6 @@
 import MicroApp from './MicroApp';
 
-import { useContext, useEffect, useState } from 'react';
+import { useRef, useContext, useEffect, useState } from 'react';
 import { FormulaStoreContext } from '@/stores/FormulaStore';
 import { useStore } from 'zustand';
 
@@ -32,20 +32,12 @@ enum Mode {
 
 const FormulaBlock = ({ instanceId }: { instanceId: number | string }) => {
   const formulaStore = useContext(FormulaStoreContext);
-  const [
-    getInstance,
-    setInstanceHeight,
-    setInstanceReady,
-    setInstanceParams,
-    setInstanceEndpoint,
-  ] = useStore(
+  const [getInstance, setInstanceHeight, setInstanceReady] = useStore(
     formulaStore,
     (s) => [
       s.actions.getInstance,
       s.actions.setInstanceHeight,
       s.actions.setInstanceReady,
-      s.actions.setInstanceParams,
-      s.actions.setInstanceEndpoint,
     ],
     shallow
   );
@@ -53,6 +45,9 @@ const FormulaBlock = ({ instanceId }: { instanceId: number | string }) => {
 
   const height = instance.height;
   const ready = instance.ready;
+
+  const endpointRef = useRef<string>();
+  const paramsRef = useRef<Record<string, unknown>>();
 
   const formulaUIUrl = process.env.NEXT_PUBLIC_API_PORT
     ? tryAPIUrl(
@@ -69,11 +64,11 @@ const FormulaBlock = ({ instanceId }: { instanceId: number | string }) => {
 
     const checkStatus = async () => {
       const { status, endpoint, params } = await serveFormula(instance.id);
+      endpointRef.current = tryAPIUrl(`/${endpoint}`);
+      paramsRef.current = params as Record<string, unknown>;
 
       if (status === 'serving') {
         clearInterval(intervalId);
-        setInstanceEndpoint(instanceId, tryAPIUrl(`/${endpoint}`));
-        setInstanceParams(instanceId, params as Record<string, unknown>);
         setInstanceReady(instanceId);
       }
     };
@@ -136,7 +131,7 @@ const FormulaBlock = ({ instanceId }: { instanceId: number | string }) => {
             onDataChange={(e: CustomEvent) => {
               if (!height) setInstanceHeight(instanceId, e.detail.data.height);
             }}
-            data={{ endpoint: instance.endpoint, params: instance.params }}
+            data={{ endpoint: endpointRef.current, params: paramsRef.current }}
             // disableScopecss
           />
         </div>

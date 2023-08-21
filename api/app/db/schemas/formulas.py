@@ -20,5 +20,6 @@ class FormulasTable(Base):
     installed_at = Column("installed_at", DateTime(timezone=True), nullable=False)
     updated_at = Column("updated_at", DateTime(timezone=True), nullable=False)
     served_at = Column("served_at", DateTime(timezone=True), nullable=True)
+    served_params = Column("served_params", Text, nullable=True)
 
     instances = relationship("InstancesTable", back_populates="formula")

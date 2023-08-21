@@ -3,6 +3,7 @@ import { FormulaStoreContext } from '@/stores/FormulaStore';
 import { useStore } from 'zustand';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import { VResizeSolidIcon } from '@/components/Icons';
+import { useStartService } from '@/hooks/useStartService';
 import ParamBlock from '@/components/ParamBlock';
 
 const FormulaParamPanel = ({ instanceId }: { instanceId: number | string }) => {
@@ -11,6 +12,8 @@ const FormulaParamPanel = ({ instanceId }: { instanceId: number | string }) => {
   const getInstance = useStore(formulaStore, (s) => s.actions.getInstance);
 
   const instance = getInstance(instanceId)!;
+
+  const { startService } = useStartService();
 
   const servParameters = instance.config?.entrypoint.serv.parameters as Record<
     string,
@@ -21,7 +24,32 @@ const FormulaParamPanel = ({ instanceId }: { instanceId: number | string }) => {
     }
   >;
 
-  const servParametersValues = instance.params as Record<string, unknown>;
+  const servParametersValues = instance.served_params as Record<
+    string,
+    unknown
+  >;
+
+  const startServiceHandler = (evt: React.FormEvent) => {
+    evt.preventDefault();
+    const target = evt.target as HTMLFormElement;
+
+    const params = (
+      Array.from(target.elements) as (HTMLInputElement | HTMLButtonElement)[]
+    )
+      .filter((inp) => inp.type !== 'submit')
+      .reduce(
+        (acc, el) => ({
+          ...acc,
+          [el.id]:
+            el.type === 'checkbox'
+              ? (el as HTMLInputElement).checked
+              : el.value,
+        }),
+        {} as Record<string, unknown>
+      );
+
+    startService(instance.id.toString(), params);
+  };
 
   return (
     <div className='absolute z-[5] top-10 w-full px-4 py-3 bg-white text-sm text-gray-500 shadow-lg rounded-b-lg'>
@@ -30,12 +58,16 @@ const FormulaParamPanel = ({ instanceId }: { instanceId: number | string }) => {
         className='flex justify-between space-x-1'
       >
         <Panel
-          defaultSize={30}
-          minSize={20}
+          defaultSize={40}
+          minSize={30}
           className='bg-slate-100 p-4 rounded-lg'
         >
           <pre className='max-h-full w-full overflow-auto scroll-smooth'>
-            {JSON.stringify(instance.config, null, 2)}
+            {JSON.stringify(
+              { config: instance.config, params: instance.served_params },
+              null,
+              2
+            )}
           </pre>
         </Panel>
         <PanelResizeHandle className='rounded-lg overflow-clip'>
@@ -44,32 +76,13 @@ const FormulaParamPanel = ({ instanceId }: { instanceId: number | string }) => {
           </div>
         </PanelResizeHandle>
         <Panel
-          defaultSize={70}
+          defaultSize={60}
           minSize={50}
           className='bg-slate-100 p-4 rounded-lg'
         >
           <form
             className='max-w-sm flex flex-col justify-start items-start space-y-8'
-            onSubmit={async (evt: React.FormEvent) => {
-              evt.preventDefault();
-              const target = evt.target as HTMLFormElement;
-
-              (
-                Array.from(target.elements) as (
-                  | HTMLInputElement
-                  | HTMLButtonElement
-                )[]
-              )
-                .filter((inp) => inp.type !== 'submit')
-                .map((el) => {
-                  console.log(
-                    el.id,
-                    el.type === 'checkbox'
-                      ? (el as HTMLInputElement).checked
-                      : el.value
-                  );
-                });
-            }}
+            onSubmit={startServiceHandler}
           >
             <div className='w-full text-gray-500 border-b border-gray-200 pb-2 font-semibold'>
               Service Parameters
