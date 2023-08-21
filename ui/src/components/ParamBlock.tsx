@@ -403,11 +403,11 @@ const ParamBlock = ({
   } else if (config.type === 'str') {
     if ('choices' in config)
       return (
-        <MultiSelect
+        <Select
           themeName='oceanBreeze'
           id={name}
           name={name}
-          init={(init as string).replace(' ', '').split(',')}
+          init={init as string}
           options={
             config.choices === 'all'
               ? tasks
