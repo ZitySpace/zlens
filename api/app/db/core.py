@@ -107,7 +107,7 @@ async def get_formula(db: Database, id: int):
 
     formula_ = FormulasTable(**formula)
     formula_.config = json.loads(formula.config)
-    formula_.served_params = json.loads(formula.served_params)
+    formula_.served_params = json.loads(formula.served_params or "{}")
     return formula_
 
 
