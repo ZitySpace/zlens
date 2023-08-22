@@ -57,6 +57,12 @@ const FormulaBlock = ({ instanceId }: { instanceId: number | string }) => {
 
   const [mode, setMode] = useState<Mode>(Mode.DEFAULT);
 
+  const panelRef = useRef<HTMLDivElement>(null);
+  const handleClosePanel = (event: MouseEvent) => {
+    if (panelRef.current && !panelRef.current.contains(event.target as Node))
+      setMode(Mode.DEFAULT);
+  };
+
   useEffect(() => {
     if (ready) return;
 
@@ -76,6 +82,14 @@ const FormulaBlock = ({ instanceId }: { instanceId: number | string }) => {
     intervalId = setInterval(checkStatus, 2000);
 
     return () => clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClosePanel);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClosePanel);
+    };
   }, []);
 
   return (
@@ -112,15 +126,17 @@ const FormulaBlock = ({ instanceId }: { instanceId: number | string }) => {
         </div>
       </div>
 
-      {mode === Mode.DESC ? (
-        <div className='absolute z-[5] top-10 px-4 py-3 bg-white text-sm text-gray-500 shadow-lg rounded-b-lg'>
-          {instance.description}
-        </div>
-      ) : mode === Mode.LOG ? (
-        <LogViewer instanceId={instanceId} />
-      ) : mode === Mode.CONFIG ? (
-        <FormulaParamPanel instanceId={instanceId} />
-      ) : null}
+      <div className='absolute z-[5] top-10 w-full' ref={panelRef}>
+        {mode === Mode.DESC ? (
+          <div className='px-4 py-3 bg-white text-sm text-gray-500 shadow-lg rounded-b-lg'>
+            {instance.description}
+          </div>
+        ) : mode === Mode.LOG ? (
+          <LogViewer instanceId={instanceId} />
+        ) : mode === Mode.CONFIG ? (
+          <FormulaParamPanel instanceId={instanceId} />
+        ) : null}
+      </div>
 
       {ready ? (
         <div className={`w-full ${height ? 'h-[' + height + 'px]' : 'h-full'}`}>

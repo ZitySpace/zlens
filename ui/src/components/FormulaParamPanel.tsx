@@ -52,7 +52,7 @@ const FormulaParamPanel = ({ instanceId }: { instanceId: number | string }) => {
   };
 
   return (
-    <div className='absolute z-[5] top-10 w-full px-4 py-3 bg-white text-sm text-gray-500 shadow-lg rounded-b-lg'>
+    <div className='px-4 py-3 bg-white text-sm text-gray-500 shadow-lg rounded-b-lg'>
       <PanelGroup
         direction='horizontal'
         className='flex justify-between space-x-1'

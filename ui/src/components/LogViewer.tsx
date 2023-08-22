@@ -65,7 +65,7 @@ const LogViewer = ({ instanceId }: { instanceId: number | string }) => {
   }, [instanceId, wsUrl]);
 
   return (
-    <pre className='absolute z-[5] top-10 w-full px-4 h-full max-h-80 overflow-scroll bg-white text-sm text-gray-500 shadow-lg rounded-b-lg'>
+    <pre className='px-4 h-80 overflow-scroll bg-white text-sm text-gray-500 shadow-lg rounded-b-lg'>
       {logs}
     </pre>
   );
