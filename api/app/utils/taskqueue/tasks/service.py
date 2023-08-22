@@ -3,6 +3,7 @@ import importlib
 import os
 import sys
 
+from databases import Database
 from fastapi.openapi.utils import get_openapi
 from uvicorn import Config, Server
 
@@ -30,11 +31,18 @@ def make_service(
         app.description = description
         app.setup()
 
+        db = Database("sqlite:///../../../zit.sqlite")
+
         @app.post("/kill")
         async def kill():
             server.should_exit = True
             server.force_exit = True
             await server.shutdown()
+
+            await db.connect()
+            query = "UPDATE formulas SET endpoint = :endpoint WHERE creator = :creator AND slug = :slug"
+            await db.execute(query=query, values={"endpoint": None, "creator": creator, "slug": slug})
+            await db.disconnect()
 
         def patched_openapi():
             if app.openapi_schema:
