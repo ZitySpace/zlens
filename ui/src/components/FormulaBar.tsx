@@ -27,9 +27,9 @@ const FormulaBar = () => {
   }, []);
 
   return (
-    <>
+    <div className='fixed h-full right-0 z-10 w-96 pb-28'>
       <div
-        className={`fixed h-full right-0 z-10 w-96 bg-indigo-50 shadow-md transition duration-500 ease-in-out ${
+        className={`h-full bg-indigo-50 shadow-md transition duration-500 ease-in-out ${
           open ? 'translate-x-0' : 'translate-x-full'
         }`}
         ref={barRef}
@@ -71,7 +71,7 @@ const FormulaBar = () => {
           />
         )}
       </div>
-    </>
+    </div>
   );
 };
 
