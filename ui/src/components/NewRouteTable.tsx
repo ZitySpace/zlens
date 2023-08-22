@@ -17,7 +17,7 @@ const NewRouteTable = () => {
       route === '' ||
       route.startsWith('/') ||
       route.includes(' ') ||
-      flattenRoutes(data, `/formulas/${route}`).includes(`/formulas/${route}`)
+      !flattenRoutes(data, `/formulas/${route}`).includes(`/formulas/${route}`)
     )
       return;
 
