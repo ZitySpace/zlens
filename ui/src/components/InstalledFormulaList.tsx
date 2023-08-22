@@ -25,7 +25,7 @@ const List = () => {
         {installedFormulas!.map((d, i) => (
           <div
             key={i}
-            className='w-full border h-36 bg-gray-50 rounded-lg pt-4 pb-2 px-4 flex flex-col justify-between items-start divide-y divide-gray-200'
+            className='w-full border min-h-[144px] bg-gray-50 rounded-lg pt-4 pb-2 px-4 flex flex-col justify-between items-start divide-y divide-gray-200'
           >
             <div className='w-full flex flex-col justify-start items-start space-y-2'>
               <span className='text-sm font-normal text-gray-600'>
