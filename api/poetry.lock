@@ -1742,12 +1742,12 @@ files = [
 [package.dependencies]
 numpy = [
     {version = ">=1.21.0", markers = "python_version <= \"3.9\" and platform_system == \"Darwin\" and platform_machine == \"arm64\""},
-    {version = ">=1.19.3", markers = "python_version >= \"3.6\" and platform_system == \"Linux\" and platform_machine == \"aarch64\" or python_version >= \"3.9\""},
-    {version = ">=1.17.0", markers = "python_version >= \"3.7\""},
-    {version = ">=1.17.3", markers = "python_version >= \"3.8\""},
     {version = ">=1.21.2", markers = "python_version >= \"3.10\""},
     {version = ">=1.21.4", markers = "python_version >= \"3.10\" and platform_system == \"Darwin\""},
     {version = ">=1.23.5", markers = "python_version >= \"3.11\""},
+    {version = ">=1.19.3", markers = "python_version >= \"3.6\" and platform_system == \"Linux\" and platform_machine == \"aarch64\" or python_version >= \"3.9\""},
+    {version = ">=1.17.0", markers = "python_version >= \"3.7\""},
+    {version = ">=1.17.3", markers = "python_version >= \"3.8\""},
 ]
 
 [[package]]
@@ -3062,14 +3062,14 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 
 [[package]]
 name = "zit"
-version = "0.0.3a26"
+version = "0.0.3a73"
 description = "ZitySpace CLI tool"
 category = "main"
 optional = false
 python-versions = ">=3.9,<4.0"
 files = [
-    {file = "zit-0.0.3a26-py3-none-any.whl", hash = "sha256:b2b50800e24997d7012f1dd20766b592eb2f32e5faabbe12e80a12782b6c0599"},
-    {file = "zit-0.0.3a26.tar.gz", hash = "sha256:dfc2ea70eaafb03f8eb167740c6d6d21e419da9c9b6f3202c314e496a7bf2b36"},
+    {file = "zit-0.0.3a73-py3-none-any.whl", hash = "sha256:7bd89e7f1c3d7ac8f1a26e102bd97138909a6fabef25de010ebba410859bd9cf"},
+    {file = "zit-0.0.3a73.tar.gz", hash = "sha256:e8c46d14a68e2f7de473e1774a7798d038bb5c6c7558f042212f615eab6151e8"},
 ]
 
 [package.dependencies]
