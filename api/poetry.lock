@@ -20,7 +20,7 @@ docs = ["sphinx (==6.1.3)", "sphinx-mdinclude (==0.5.3)"]
 name = "alembic"
 version = "1.11.1"
 description = "A database migration tool for SQLAlchemy."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -1411,32 +1411,6 @@ yaml = ["PyYAML (>=3.10)"]
 zookeeper = ["kazoo (>=2.8.0)"]
 
 [[package]]
-name = "lapjv"
-version = "1.3.24"
-description = "Linear sum assignment problem solver using Jonker-Volgenant algorithm."
-category = "main"
-optional = false
-python-versions = "*"
-files = [
-    {file = "lapjv-1.3.24-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:d80a5e52892bbdacef1bf589b890473e8d876a8b3de811c59cbd212ac436ea33"},
-    {file = "lapjv-1.3.24-cp310-cp310-musllinux_1_1_x86_64.whl", hash = "sha256:df97c7cf7113e98057d02a558b1068a79a980d66c5fa419edf83aaa83252e8ff"},
-    {file = "lapjv-1.3.24-cp310-cp310-win_amd64.whl", hash = "sha256:907e5bb30e81247f5aa04abfbdb8d648573fe3c9a5b4aebb430b702ef301ce25"},
-    {file = "lapjv-1.3.24-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:c4a5ab5ad6f96af5a067ae89690fb39a30e39a4a5af2389738a6ee406029fb1f"},
-    {file = "lapjv-1.3.24-cp311-cp311-musllinux_1_1_x86_64.whl", hash = "sha256:83468250c3f5ccae42e504090d46b8475b60bf001c4a4341369569bfe4ece643"},
-    {file = "lapjv-1.3.24-cp311-cp311-win_amd64.whl", hash = "sha256:a5143cdd2499442c09b807fd360213cff5c5fcd9c4733fb1c95c7859552f48c1"},
-    {file = "lapjv-1.3.24-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:23f3335f1eae54bf9b4e4b028f848c95e126eace889333e4d4704cdb7e968d59"},
-    {file = "lapjv-1.3.24-cp38-cp38-musllinux_1_1_x86_64.whl", hash = "sha256:aaf61eb451de7ed06e381eeaa3bebbb2ac0659a0d592a63cd9612b697964c119"},
-    {file = "lapjv-1.3.24-cp38-cp38-win_amd64.whl", hash = "sha256:2cbffb4b898120419591bbd203fc4a87cdcadeda70c51987f931e968415d5eb7"},
-    {file = "lapjv-1.3.24-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:1e6de3c626e0e06be50708a1873df85059c6f602de02adeb27ee412bb5e13a51"},
-    {file = "lapjv-1.3.24-cp39-cp39-musllinux_1_1_x86_64.whl", hash = "sha256:9e0c41761c9e59628a08bf42c37b0be5b129200f9a2205722955209f58dbefe0"},
-    {file = "lapjv-1.3.24-cp39-cp39-win_amd64.whl", hash = "sha256:3d1c114f36132ce53401860d621f794c21a64a2067fe8840613255593b335a53"},
-    {file = "lapjv-1.3.24.tar.gz", hash = "sha256:7fef3b100204baa2d17b755e85975f27814ca78d6f79d1cf3e4c7f1cef9c190c"},
-]
-
-[package.dependencies]
-numpy = ">=1.20.0"
-
-[[package]]
 name = "lazy-loader"
 version = "0.3"
 description = "lazy_loader"
@@ -1475,7 +1449,7 @@ dev = ["Sphinx (==5.3.0)", "colorama (==0.4.5)", "colorama (==0.4.6)", "freezegu
 name = "mako"
 version = "1.2.4"
 description = "A super-fast templating language that borrows the best ideas from the existing templating languages."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -1495,7 +1469,7 @@ testing = ["pytest"]
 name = "markupsafe"
 version = "2.1.3"
 description = "Safely add untrusted strings to HTML/XML markup."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -3062,14 +3036,14 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 
 [[package]]
 name = "zit"
-version = "0.0.3a73"
+version = "0.0.3"
 description = "ZitySpace CLI tool"
 category = "main"
 optional = false
 python-versions = ">=3.9,<4.0"
 files = [
-    {file = "zit-0.0.3a73-py3-none-any.whl", hash = "sha256:7bd89e7f1c3d7ac8f1a26e102bd97138909a6fabef25de010ebba410859bd9cf"},
-    {file = "zit-0.0.3a73.tar.gz", hash = "sha256:e8c46d14a68e2f7de473e1774a7798d038bb5c6c7558f042212f615eab6151e8"},
+    {file = "zit-0.0.3-py3-none-any.whl", hash = "sha256:11fd53c75d19f06a3762823e41464dc8a0516a94c005701dee25cefc2a059e63"},
+    {file = "zit-0.0.3.tar.gz", hash = "sha256:eb954eee68661ac312b2a46b7ab208693ee51a9461b98b5532c5cb700f718e76"},
 ]
 
 [package.dependencies]
@@ -3153,4 +3127,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "a62a0f8286e7782d01d2d2c51bab0035742007b5a161d906f616e540585f2527"
+content-hash = "0faf5474b49bb7e4533ad98cdaee918fcd88f99e1b8734d807c354b49bd82e30"

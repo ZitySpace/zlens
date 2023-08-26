@@ -16,9 +16,9 @@ celery = {extras = ["gevent"], version = "^5.2.7"}
 httpx = "^0.24.0"
 zit = {version = "*", allow-prereleases = true}
 scikit-learn = "^1.3.0"
-lapjv = "^1.3.24"
 websockets = "^11.0.3"
 imgaug = {git = "https://github.com/ZhengRui/imgaug.git"}
+alembic = "^1.10.4"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -28,7 +28,6 @@ flake8 = "^6.0.0"
 isort = "^5.12.0"
 pre-commit = "^3.2.2"
 commitizen = "^2.42.1"
-alembic = "^1.10.4"
 watchdog = "^3.0.0"
 
 [build-system]
