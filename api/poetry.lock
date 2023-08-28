@@ -3036,14 +3036,14 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 
 [[package]]
 name = "zit"
-version = "0.0.3"
+version = "0.0.4a0"
 description = "ZitySpace CLI tool"
 category = "main"
 optional = false
 python-versions = ">=3.9,<4.0"
 files = [
-    {file = "zit-0.0.3-py3-none-any.whl", hash = "sha256:11fd53c75d19f06a3762823e41464dc8a0516a94c005701dee25cefc2a059e63"},
-    {file = "zit-0.0.3.tar.gz", hash = "sha256:eb954eee68661ac312b2a46b7ab208693ee51a9461b98b5532c5cb700f718e76"},
+    {file = "zit-0.0.4a0-py3-none-any.whl", hash = "sha256:208d31b52a4a563bdc2db387aa4e0ae50e2dd3877fcfb0b9933c95765192c4ed"},
+    {file = "zit-0.0.4a0.tar.gz", hash = "sha256:7ab284a5ad34556ff3673049f5f31f93657758d6e2c9042100e12106acccffa2"},
 ]
 
 [package.dependencies]
